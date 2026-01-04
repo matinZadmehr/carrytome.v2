@@ -1418,213 +1418,167 @@
     </div>
   </section>
 
-  <section id="page-registered-flight" data-page="registered-flight"
-    class="page hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased selection:bg-primary/30 selection:text-primary"
-    aria-hidden="true">
-    <div
-      class="relative mx-auto flex h-full min-h-screen w-full max-w-md flex-col overflow-x-hidden bg-background-light dark:bg-background-dark shadow-2xl">
-      <header
-        class="sticky top-0 z-20 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
-        <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">فرصت‌های تحویل</h1>
-        <button
-          class="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
-          <span class="material-symbols-outlined text-[24px]">filter_list</span>
-        </button>
-      </header>
-      <main class="flex-1 flex flex-col pb-8">
-        <div class="px-4 py-4">
-          <div
-            class="flex flex-col gap-4 p-5 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 shadow-soft">
-            <div class="flex items-center justify-between mb-1">
-              <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
-                فیلترها
-              </h2>
-              <button class="text-xs text-primary font-medium hover:text-blue-600 transition-colors">پاک
-                کردن</button>
+<section id="page-registered-flight" data-page="registered-flight"
+  class="page hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 font-display antialiased selection:bg-primary/30 selection:text-primary"
+  aria-hidden="true">
+
+  <div class="relative mx-auto flex h-full min-h-screen w-full max-w-md flex-col overflow-x-hidden bg-background-light dark:bg-background-dark shadow-2xl">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-20 bg-background-light/95 dark:bg-background-dark/95 backdrop-blur-md px-4 py-3 flex items-center justify-between border-b border-slate-200 dark:border-slate-800">
+      <h1 class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">فرصت‌های تحویل</h1>
+      <button class="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-slate-800 shadow-sm border border-slate-100 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
+        <span class="material-symbols-outlined text-[24px]">filter_list</span>
+      </button>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-1 flex flex-col pb-8">
+
+      <!-- Filters -->
+      <div class="px-4 py-4">
+        <div class="flex flex-col gap-4 p-5 rounded-2xl bg-surface-light dark:bg-surface-dark border border-slate-200 dark:border-slate-800 shadow-soft">
+
+          <!-- Filters Header -->
+          <div class="flex items-center justify-between mb-1">
+            <h2 class="text-sm font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">tune</span>
+              فیلترها
+            </h2>
+            <button class="text-xs text-primary font-medium hover:text-blue-600 transition-colors">پاک کردن</button>
+          </div>
+
+          <!-- Filter Inputs -->
+          <div class="flex flex-col gap-5">
+
+            <!-- Category select -->
+            <div class="relative group">
+              <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors material-symbols-outlined text-[20px]">category</span>
+              <select class="w-full h-11 appearance-none rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 pr-10 pl-8 text-sm text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer">
+                <option disabled selected value="">دسته‌بندی کالا</option>
+                <option value="docs">مدارک</option>
+                <option value="electronics">الکترونیک</option>
+                <option value="clothes">پوشاک</option>
+                <option value="valuables">اشیاء قیمتی</option>
+              </select>
+              <span class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[16px] pointer-events-none">expand_more</span>
             </div>
-            <div class="flex flex-col gap-5">
-              <div class="relative group">
-                <span
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-primary transition-colors material-symbols-outlined text-[20px]">category</span>
-                <select
-                  class="w-full h-11 appearance-none rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700 pr-10 pl-8 text-sm text-slate-700 dark:text-slate-300 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all cursor-pointer">
-                  <option disabled="" selected="" value="">دسته‌بندی کالا</option>
-                  <option value="docs">مدارک</option>
-                  <option value="electronics">الکترونیک</option>
-                  <option value="clothes">پوشاک</option>
-                  <option value="valuables">اشیاء قیمتی</option>
-                </select>
-                <span
-                  class="absolute left-2 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined text-[16px] pointer-events-none">expand_more</span>
-              </div>
-              <div class="flex flex-col gap-3">
+
+            <!-- Price range slider -->
+            <div class="flex flex-col gap-3">
               <div class="flex justify-between items-center text-xs font-medium text-slate-600 dark:text-slate-300">
                 <span>محدوده قیمت (OMR)</span>
-                <!-- Add an ID here for JS -->
                 <span id="registered-flight-price-display" class="text-primary font-bold dir-ltr">100 OMR</span>
               </div>
               <input id="registered-flight-price-range"
-                    class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    max="200" min="0" type="range" value="100" />
+                class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700 accent-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                max="200" min="0" type="range" value="100" />
               <div class="flex justify-between text-[10px] text-slate-400">
                 <span>۰</span>
                 <span>۲۰۰</span>
               </div>
             </div>
 
-              </div>
-              <button
-                class="w-full h-11 mt-1 rounded-xl bg-primary hover:bg-blue-600 text-white text-sm font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
-                جستجو
-              </button>
-            </div>
+            <!-- Search button -->
+            <button class="w-full h-11 mt-1 rounded-xl bg-primary hover:bg-blue-600 text-white text-sm font-bold shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+              جستجو
+            </button>
+
           </div>
         </div>
-        <div class="flex flex-col gap-4 px-4 mt-2">
-          <div
-            class="group relative flex flex-col gap-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-shadow duration-300 border border-transparent dark:border-slate-800">
-            <div class="flex items-start justify-between gap-4">
-              <div class="flex flex-[2] flex-col gap-3">
-                <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-2">
-                    <h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight font-display">
-                      THR <span class="text-slate-400 mx-1 text-xs">✈️</span> MCT</h3>
-                  </div>
-                  <p class="text-slate-500 dark:text-slate-400 text-xs font-normal">تهران به مسقط</p>
+      </div>
+
+      <!-- Flight Cards -->
+      <div class="flex flex-col gap-4 px-4 mt-2">
+
+        <!-- Flight Card 1 -->
+        
+        <!-- Flight Card 2 -->
+        <div class="group relative flex flex-col gap-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-shadow duration-300 border border-transparent dark:border-slate-800">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex flex-[2] flex-col gap-3">
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                  <h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight font-display">
+                    THR <span class="text-slate-400 mx-1 text-xs">✈️</span> MCT
+                  </h3>
                 </div>
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-[12px]">calendar_today</span>
-                    ۱۲ مهر
-                  </span>
-                  <span
-                    class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-[12px]">luggage</span>
-                    لپ‌تاپ
-                  </span>
-                </div>
-                <div class="text-primary font-bold text-lg mt-1">50 OMR</div>
+                <p class="text-slate-500 dark:text-slate-400 text-xs font-normal">تهران به مسقط</p>
               </div>
-              <div class="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden shadow-sm">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10"></div>
-                <div class="w-full h-full bg-center bg-no-repeat bg-cover" data-alt="Dubai skyline"
-                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBqSiD14mSgK581mmCO0OKFUTpe_BPNQtthBZ4-lQAGV6uRz9OrywkHhKVzYud7P0IFpQgHEpGVkole86ujgxA_267YWx1R2N7vDNoN0Ps6JUagUFAfIKAkMvkTTU2j9s_38HpDdd9dVigOzK0y3Kz1wt-g5gORWP3pIiW_raqiy5kW6BIN2MdMoFE5QyDPW3tMBEGavZpv1Mgs3VKufWJ2TTmC9_7nVCv7NfWFaxAlOZSGNW2ZGMvnXNlxLUVSM5BqPGEUORXQc2j5");'>
-                </div>
-                <div class="absolute bottom-1 right-1 z-20">
-                  <span class="material-symbols-outlined text-white text-[14px]">verified_user</span>
-                </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                  <span class="material-symbols-outlined text-[12px]">calendar_today</span> ۱۵ مهر
+                </span>
+                <span class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                  <span class="material-symbols-outlined text-[12px]">description</span> مدارک
+                </span>
               </div>
+              <div class="text-primary font-bold text-lg mt-1">35 OMR</div>
             </div>
-            <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/50">
-              <button
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold"
-                data-route="flight-order">
-                مشاهده جزئیات
-              </button>
-              <button
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-primary hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all text-xs font-bold">
-                افزودن به سفارش‌ها
-              </button>
+            <div class="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden shadow-sm">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10"></div>
+              <div class="w-full h-full bg-center bg-no-repeat bg-cover"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAMI5OKQPn80sRQnEV2iOQWozvmbcL7rbLbuePwEaQqRt-qc1r5Lc-c9asRG-Xz-9cLN17steF3gysrGaLZHPW71Jm847ln4USc5cP9r7JSM7yy4F1_9oFM2H_1yVycuVCi-RNtaqF7sQ2xriyDwi5Kvt_Qzz2aBaV6veTYgi_Z-zB3_s4-IoCZFeU3nqPD3_aRdquEchwoTbPNKLTA0wWdAGWtPL8D7RgqdZPFgpnivqIFBjc_mjxl4McLq8SnWAU_J7-5VzFyKdPx");'></div>
+              <div class="absolute bottom-1 right-1 z-20">
+                <span class="material-symbols-outlined text-white text-[14px]">verified_user</span>
+              </div>
             </div>
           </div>
-          <div
-            class="group relative flex flex-col gap-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-shadow duration-300 border border-transparent dark:border-slate-800">
-            <div class="flex items-start justify-between gap-4">
-              <div class="flex flex-[2] flex-col gap-3">
-                <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-2">
-                    <h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight font-display">
-                      THR <span class="text-slate-400 mx-1 text-xs">✈️</span> MCT</h3>
-                  </div>
-                  <p class="text-slate-500 dark:text-slate-400 text-xs font-normal">تهران به مسقط</p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-[12px]">calendar_today</span>
-                    ۱۵ مهر
-                  </span>
-                  <span
-                    class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-[12px]">description</span>
-                    مدارک
-                  </span>
-                </div>
-                <div class="text-primary font-bold text-lg mt-1">35 OMR</div>
-              </div>
-              <div class="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden shadow-sm">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10"></div>
-                <div class="w-full h-full bg-center bg-no-repeat bg-cover" data-alt="London skyline"
-                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAMI5OKQPn80sRQnEV2iOQWozvmbcL7rbLbuePwEaQqRt-qc1r5Lc-c9asRG-Xz-9cLN17steF3gysrGaLZHPW71Jm847ln4USc5cP9r7JSM7yy4F1_9oFM2H_1yVycuVCi-RNtaqF7sQ2xriyDwi5Kvt_Qzz2aBaV6veTYgi_Z-zB3_s4-IoCZFeU3nqPD3_aRdquEchwoTbPNKLTA0wWdAGWtPL8D7RgqdZPFgpnivqIFBjc_mjxl4McLq8SnWAU_J7-5VzFyKdPx");'>
-                </div>
-                <div class="absolute bottom-1 right-1 z-20">
-                  <span class="material-symbols-outlined text-white text-[14px]">verified_user</span>
-                </div>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/50">
-              <button
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold"
-                data-route="flight-order">
-                مشاهده جزئیات
-              </button>
-              <button
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-primary hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all text-xs font-bold">
-                افزودن به سفارش‌ها
-              </button>
-            </div>
-          </div>
-          <div
-            class="group relative flex flex-col gap-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-shadow duration-300 border border-transparent dark:border-slate-800">
-            <div class="flex items-start justify-between gap-4">
-              <div class="flex flex-[2] flex-col gap-3">
-                <div class="flex flex-col gap-1">
-                  <div class="flex items-center gap-2">
-                    <h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight font-display">
-                      THR <span class="text-slate-400 mx-1 text-xs">✈️</span> MCT</h3>
-                  </div>
-                  <p class="text-slate-500 dark:text-slate-400 text-xs font-normal">تهران به مسقط</p>
-                </div>
-                <div class="flex flex-wrap gap-2">
-                  <span
-                    class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-[12px]">calendar_today</span>
-                    ۱۸ مهر
-                  </span>
-                  <span
-                    class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
-                    <span class="material-symbols-outlined text-[12px]">watch</span>
-                    ساعت
-                  </span>
-                </div>
-                <div class="text-primary font-bold text-lg mt-1">140 OMR</div>
-              </div>
-              <div class="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden shadow-sm">
-                <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10"></div>
-                <div class="w-full h-full bg-center bg-no-repeat bg-cover" data-alt="NY skyline"
-                  style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBgG5YGD_XXUt_RdarrXsU_kxzSVxrfzfr5xx0I8sW7q0_sW-v0bpfaWSHCRC3EN66ENqgde74TAk34ay2mXTlkQ2RXFFCQ2udirNFhlSmgO8SabeqnC9zmJMuYrizDrJqg3El9FXOpGziRw4mDBhC3zcXC_iL3w3TKZxZLjOszcTPpQ2dO_CwmK7QwWzQW2mFiHoQKobCkYEBYpC_aiP4XJHLNTd5OXF18OO4lO8Nr8md_FeMykdvATSoZJ1O59RG2i9m8pnKqbHlo");'>
-                </div>
-              </div>
-            </div>
-            <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/50">
-              <button
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold">
-                مشاهده جزئیات
-              </button>
-              <button
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-primary hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all text-xs font-bold">
-                افزودن به سفارش‌ها
-              </button>
-            </div>
+          <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/50">
+            <button class="flex items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold" data-route="flight-order">
+              مشاهده جزئیات
+            </button>
+            <button class="flex items-center justify-center rounded-xl h-10 px-4 bg-primary hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all text-xs font-bold">
+              افزودن به سفارش‌ها
+            </button>
           </div>
         </div>
-      </main>
-    </div>
+
+        <!-- Flight Card 3 -->
+        <div class="group relative flex flex-col gap-4 rounded-2xl bg-surface-light dark:bg-surface-dark p-4 shadow-soft hover:shadow-md transition-shadow duration-300 border border-transparent dark:border-slate-800">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex flex-[2] flex-col gap-3">
+              <div class="flex flex-col gap-1">
+                <div class="flex items-center gap-2">
+                  <h3 class="text-slate-900 dark:text-white text-base font-bold leading-tight font-display">
+                    THR <span class="text-slate-400 mx-1 text-xs">✈️</span> MCT
+                  </h3>
+                </div>
+                <p class="text-slate-500 dark:text-slate-400 text-xs font-normal">تهران به مسقط</p>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                  <span class="material-symbols-outlined text-[12px]">calendar_today</span> ۱۸ مهر
+                </span>
+                <span class="inline-flex items-center gap-1 rounded-md bg-slate-100 dark:bg-slate-700 px-2 py-1 text-[10px] font-medium text-slate-600 dark:text-slate-300">
+                  <span class="material-symbols-outlined text-[12px]">watch</span> ساعت
+                </span>
+              </div>
+              <div class="text-primary font-bold text-lg mt-1">140 OMR</div>
+            </div>
+            <div class="relative w-24 h-24 shrink-0 rounded-xl overflow-hidden shadow-sm">
+              <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10"></div>
+              <div class="w-full h-full bg-center bg-no-repeat bg-cover"
+                style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBgG5YGD_XXUt_RdarrXsU_kxzSVxrfzfr5xx0I8sW7q0_sW-v0bpfaWSHCRC3EN66ENqgde74TAk34ay2mXTlkQ2RXFFCQ2udirNFhlSmgO8SabeqnC9zmJMuYrizDrJqg3El9FXOpGziRw4mDBhC3zcXC_iL3w3TKZxZLjOszcTPpQ2dO_CwmK7QwWzQW2mFiHoQKobCkYEBYpC_aiP4XJHLNTd5OXF18OO4lO8Nr8md_FeMykdvATSoZJ1O59RG2i9m8pnKqbHlo");'></div>
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/50">
+            <button class="flex items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold">
+              مشاهده جزئیات
+            </button>
+            <button class="flex items-center justify-center rounded-xl h-10 px-4 bg-primary hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all text-xs font-bold">
+              افزودن به سفارش‌ها
+            </button>
+          </div>
+        </div>
+
+      </div>
     </main>
-    </div>
-  </section>
+  </div>
+</section>
+
+
+
   <section id="page-my-order" data-page="my-order"
     class="page hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden transition-colors duration-200"
     aria-hidden="true">
