@@ -2,8 +2,8 @@
 import { initRouter, initNavigation } from './router.js';
 import { initTheme } from './theme.js';
 import { hideAppLoader } from './utils/dom.js';
-import { initWeightSliders } from './components/sliders.js';
-initWeightSliders();
+import { initSliders } from './components/sliders.js';
+initSliders();
 // Import page initializers with error handling
 const PAGE_INITIALIZERS = {};
 
