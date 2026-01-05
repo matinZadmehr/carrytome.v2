@@ -59,6 +59,67 @@
   </script>
 
   <style>
+    /* Add to drag-drop-styles */
+    .drop-placeholder {
+      transition: all 0.3s ease !important;
+    }
+
+    .input-group {
+      position: relative !important;
+    }
+
+    input[type="text"]::-webkit-input-placeholder {
+      color: transparent;
+    }
+
+    input[type="text"]:-moz-placeholder {
+      color: transparent;
+    }
+
+    input[type="text"]::-moz-placeholder {
+      color: transparent;
+    }
+
+    input[type="text"]:-ms-input-placeholder {
+      color: transparent;
+    }
+
+    input[type="text"]::placeholder {
+      color: transparent;
+    }
+
+    /* Popular route button animations */
+    .popular-route-btn {
+      transition: all 0.3s ease;
+    }
+
+    .popular-route-btn:active {
+      transform: scale(0.95);
+    }
+    /* Animation for drag success */
+    @keyframes pulseSuccess {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    .drop-success {
+      animation: pulseSuccess 0.5s ease;
+    }
+
+    /* Smooth transitions */
+    .draggable, .drop-target {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Better cursor for draggable items */
+    .draggable {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M10 6h4v4h-4zm8 0h4v4h-4zm-8 8h4v4h-4zm8 0h4v4h-4zm-8 8h4v4h-4zm8 0h4v4h-4z' fill='%233b82f6'/%3E%3C/svg%3E") 16 16, grab;
+    }
+
+    .draggable:active {
+      cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M10 6h4v4h-4zm8 0h4v4h-4zm-8 8h4v4h-4zm8 0h4v4h-4zm-8 8h4v4h-4zm8 0h4v4h-4z' fill='%231d4ed8'/%3E%3C/svg%3E") 16 16, grabbing;
+    }
     /* Add this to your main CSS file or style tag */
     input[type="range"] {
       direction: rtl !important;
@@ -1167,7 +1228,7 @@
             <div
               class="group flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200">
               <div class="flex h-14 w-12 items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-[24px]">location_on</span>
+                <span class="material-symbols-outlined text-[24px]"></span>
               </div>
               <input
                 class="flex-1 bg-transparent border-none text-right text-base font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 h-14 pr-0 pl-4"
@@ -1190,7 +1251,7 @@
               class="group flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200">
               <div
                 class="flex h-14 w-12 items-center justify-center text-slate-400 group-focus-within:text-primary transition-colors">
-                <span class="material-symbols-outlined text-[24px]">flight_land</span>
+                <span class="material-symbols-outlined text-[24px]"></span>
               </div>
               <input
                 class="flex-1 bg-transparent border-none text-right text-base font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 h-14 pr-0 pl-4"
@@ -1199,29 +1260,7 @@
           </div>
         </div>
       </div>
-      <div class="mt-6 px-4">
-        <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3 pr-1">مسیرهای محبوب</h3>
-        <div class="flex flex-wrap gap-2">
-          <button
-            class="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary active:bg-primary/5 transition-colors shadow-sm"
-            type="button">
-            <span>Imam Khomeini International Airport
-            </span>
-            <span class="material-symbols-outlined text-[16px] text-slate-400 rotate-180">arrow_right_alt</span>
-            <span>Muscat International Airport
-            </span>
-          </button>
-          <button
-            class="flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary active:bg-primary/5 transition-colors shadow-sm"
-            type="button">
-            <span>Muscat International Airport
-            </span>
-            <span class="material-symbols-outlined text-[16px] text-slate-400 rotate-180">arrow_right_alt</span>
-            <span>Imam Khomeini International Airport
-            </span>
-          </button>
-        </div>
-      </div>
+      
       <div class="mt-8 px-5">
         <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 pr-1">پیشنهادها</h3>
         <div class="flex flex-col gap-2">
@@ -1300,7 +1339,7 @@
             <div
               class="group flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200">
               <div class="flex h-14 w-12 items-center justify-center text-primary">
-                <span class="material-symbols-outlined text-[24px]">flight_takeoff</span>
+                <span class="material-symbols-outlined text-[24px]"></span>
               </div>
               <input id="origin-input"
                 class="flex-1 bg-transparent border-none text-right text-base font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 h-14 pr-0 pl-4 traveler-route-input"
@@ -1325,7 +1364,7 @@
               class="group flex items-center bg-slate-50 dark:bg-slate-900/50 rounded-2xl border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-slate-900 transition-all duration-200">
               <div
                 class="flex h-14 w-12 items-center justify-center text-slate-400 group-focus-within:text-primary transition-colors">
-                <span class="material-symbols-outlined text-[24px]">flight_land</span>
+                <span class="material-symbols-outlined text-[24px]"></span>
               </div>
               <input id="dest-input"
                 class="flex-1 bg-transparent border-none text-right text-base font-medium text-slate-900 dark:text-white placeholder:text-slate-400 focus:ring-0 h-14 pr-0 pl-4 traveler-route-input"
@@ -1336,33 +1375,6 @@
       </div>
 
       <!-- Popular Routes -->
-      <div class="mt-6 px-4">
-        <h3 class="text-sm font-bold text-slate-900 dark:text-white mb-3 pr-1">مسیرهای محبوب</h3>
-        <div class="flex flex-wrap gap-2" id="popular-routes">
-          <button
-            class="popular-route-btn flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary active:bg-primary/5 transition-colors shadow-sm"
-            type="button" data-route="thr-mct" data-origin="Imam Khomeini International Airport
-" data-destination="Muscat International Airport
-">
-            <span>Imam Khomeini International Airport
-            </span>
-            <span class="material-symbols-outlined text-[16px] text-slate-400 rotate-180">arrow_right_alt</span>
-            <span>Muscat International Airport
-            </span>
-          </button>
-          <button
-            class="popular-route-btn flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-sm font-medium text-slate-600 dark:text-slate-300 hover:border-primary hover:text-primary active:bg-primary/5 transition-colors shadow-sm"
-            type="button" data-route="mct-thr" data-origin="Muscat International Airport
-" data-destination="Imam Khomeini International Airport
-">
-            <span>Muscat International Airport
-            </span>
-            <span class="material-symbols-outlined text-[16px] text-slate-400 rotate-180">arrow_right_alt</span>
-            <span>Imam Khomeini International Airport
-            </span>
-          </button>
-        </div>
-      </div>
 
       <!-- Airport Suggestions -->
       <div class="mt-8 px-5 mb-8">
@@ -2204,7 +2216,7 @@
         </button>
         <button
           class="w-full flex items-center gap-3 p-4 rounded-xl bg-surface-light dark:bg-surface-dark border border-slate-100 dark:border-slate-800 shadow-sm hover:shadow-md transition-all">
-          <span class="material-symbols-outlined text-accent text-[24px]">location_on</span>
+          <span class="material-symbols-outlined text-accent text-[24px]"></span>
           <div class="text-left flex-1">
             <p class="font-bold text-slate-900 dark:text-white">آدرس‌های من</p>
             <p class="text-xs text-slate-500 dark:text-slate-400">مدیریت آدرس‌های تحویل</p>
@@ -2617,7 +2629,7 @@
           <div class="relative flex gap-4 pb-8">
             <div class="flex flex-col items-center gap-1 z-10">
               <div class="bg-primary/10 dark:bg-primary/20 p-2 rounded-full text-primary">
-                <span class="material-symbols-outlined text-[20px]">flight_takeoff</span>
+                <span class="material-symbols-outlined text-[20px]"></span>
               </div>
             </div>
             <div class="flex flex-col pt-1">
@@ -2629,7 +2641,7 @@
           <div class="relative flex gap-4">
             <div class="flex flex-col items-center gap-1 z-10">
               <div class="bg-primary/10 dark:bg-primary/20 p-2 rounded-full text-primary">
-                <span class="material-symbols-outlined text-[20px]">flight_land</span>
+                <span class="material-symbols-outlined text-[20px]"></span>
               </div>
             </div>
             <div class="flex flex-col pt-1">
@@ -2730,7 +2742,7 @@
             <div class="w-[2px] bg-gradient-to-b from-primary/50 to-primary/10 h-12 grow rounded-full">
             </div>
             <span class="material-symbols-outlined text-[#4b6c9b] dark:text-gray-400"
-              style="font-size: 20px;">location_on</span>
+              style="font-size: 20px;"></span>
           </div>
           <!-- Timeline Content -->
           <div class="flex flex-col h-full justify-between gap-6">

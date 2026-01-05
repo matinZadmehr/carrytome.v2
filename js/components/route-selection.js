@@ -1,5 +1,5 @@
 /**
- * Enhanced Route Selection Component
+ * Enhanced Route Selection Component with Drag & Drop
  * Handles route selection for both cargo and traveler pages
  */
 
@@ -9,6 +9,9 @@ export function initRouteSelection() {
   if (!page) return;
 
   console.log('Initializing enhanced cargo route selection...');
+  
+  // Initialize drag and drop
+  initDragAndDrop(page, 'cargo');
 
   // Get DOM elements
   const originInput = page.querySelector('input[placeholder*="مبدأ"]') ||
@@ -61,6 +64,9 @@ export function initRouteSelection() {
     item.addEventListener('click', () => {
       handleSuggestionClick(item, originInput, destInput, 'cargo');
     });
+    
+    // Make suggestions draggable
+    makeDraggable(item, 'cargo', originInput, destInput);
   });
 
   // Setup confirm button
@@ -96,7 +102,7 @@ export function initRouteSelection() {
   console.log('Cargo route selection initialized');
 }
 
-// Traveler Route Selection - UPDATED WITH FIXED SUGGESTIONS
+// Traveler Route Selection with Drag & Drop
 export function initTravelerRouteSelection() {
   const page = document.querySelector('[data-page="traveler-route"]');
   if (!page) {
@@ -104,7 +110,10 @@ export function initTravelerRouteSelection() {
     return;
   }
 
-  console.log('Initializing enhanced traveler route selection...');
+  console.log('Initializing enhanced traveler route selection with drag & drop...');
+  
+  // Initialize drag and drop
+  initDragAndDrop(page, 'traveler');
 
   // Get DOM elements using specific IDs
   const originInput = page.querySelector('#origin-input');
@@ -148,7 +157,7 @@ export function initTravelerRouteSelection() {
           submitBtn.disabled = !validateRoute(origin, destination, false);
         }
       }
-    },{once:true});
+    }, { once: true });
   });
 
   // Setup swap button
@@ -170,10 +179,10 @@ export function initTravelerRouteSelection() {
       if (submitBtn) {
         submitBtn.disabled = !validateRoute(originInput.value, destInput.value, false);
       }
-    },{once:true});
+    }, { once: true });
   }
 
-  // FIXED: Setup airport suggestions with better selector
+  // Setup airport suggestions
   const airportSuggestions = page.querySelectorAll('.airport-suggestion');
   console.log('Found airport suggestions:', airportSuggestions.length);
 
@@ -187,13 +196,16 @@ export function initTravelerRouteSelection() {
   console.log('Fresh airport suggestions after clone:', freshSuggestions.length);
 
   freshSuggestions.forEach(item => {
+    // Click handler
     item.addEventListener('click', (e) => {
       e.preventDefault();
       e.stopPropagation();
-
       console.log('Airport suggestion clicked:', item);
       handleSuggestionClick(item, originInput, destInput, 'traveler', submitBtn);
     });
+
+    // Make draggable
+    makeDraggable(item, 'traveler', originInput, destInput);
 
     // Add hover effect
     item.addEventListener('mouseenter', () => {
@@ -231,7 +243,7 @@ export function initTravelerRouteSelection() {
           submitBtn.innerHTML = originalHTML;
         }, 800);
       }
-    } ,{once:true} );
+    }, { once: true });
   }
 
   // Setup back button
@@ -244,9 +256,9 @@ export function initTravelerRouteSelection() {
       if (window.history.length > 1) {
         window.history.back();
       } else {
-        navigateToRoute('home'); // یا نام مسیر قبلی
+        navigateToRoute('home');
       }
-    }, {once:true});
+    }, { once: true });
   }
 
   // Setup input validation and styling
@@ -265,59 +277,11 @@ export function initTravelerRouteSelection() {
     console.log('Initial submit button state:', isValid ? 'enabled' : 'disabled');
   }
 
-  // Add event delegation for dynamic elements
-  setupEventDelegation(page);
-
   console.log('Traveler route selection initialized successfully');
 }
+//=====helper functions for drag & drop=====
 
-// Helper function to handle suggestion clicks
-function handleSuggestionClick(item, originInput, destInput, type, submitBtn = null) {
-  const title = item.querySelector('.text-sm.font-bold')?.textContent.trim();
-  const airport = item.dataset.airport || '';
-  const code = item.dataset.code || '';
-
-  let displayText = title;
-  if (airport && code) {
-    displayText = `${airport} (${code})`;
-  }
-
-  console.log('Suggestion clicked:', { title, airport, code, displayText });
-
-  // Determine which input is focused
-  const focusedInput = document.activeElement;
-
-  if (focusedInput === originInput) {
-    originInput.value = displayText;
-    updateInputStyle(originInput);
-  } else if (focusedInput === destInput) {
-    destInput.value = displayText;
-    updateInputStyle(destInput);
-  } else {
-    // If no input is focused, check which one is empty or fill both
-    if (!originInput.value.trim()) {
-      originInput.value = displayText;
-      originInput.focus();
-      updateInputStyle(originInput);
-    } else if (!destInput.value.trim()) {
-      destInput.value = displayText;
-      destInput.focus();
-      updateInputStyle(destInput);
-    } else {
-      // Both inputs have values - let user choose
-      showInputSelector(originInput, destInput, displayText, type);
-    }
-  }
-
-  // Save to localStorage
-  saveRouteData(originInput.value, destInput.value, type);
-
-  // Update submit button state if provided
-  if (submitBtn) {
-    const isValid = validateRoute(originInput.value, destInput.value, false);
-    submitBtn.disabled = !isValid;
-  }
-}
+// ===================== MISSING UTILITY FUNCTIONS =====================
 
 // Helper function to set up input handlers
 function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
@@ -382,70 +346,47 @@ function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
   });
 }
 
-// Helper function for event delegation
-function setupEventDelegation(page) {
-  // Delegate clicks for popular routes - HANDLE DIRECTLY
-  const popularRoutesContainer = page.querySelector('#popular-routes');
-  if (popularRoutesContainer) {
-    popularRoutesContainer.addEventListener('click', (e) => {
-      const button = e.target.closest('.popular-route-btn');
-      if (button) {
-        e.preventDefault();
-        e.stopPropagation();
-        
-        // Handle the click directly instead of re-dispatching
-        const origin = button.dataset.origin?.trim() || 
-                      button.querySelector('span:nth-child(1)')?.textContent.trim();
-        const destination = button.dataset.destination?.trim() || 
-                          button.querySelector('span:nth-child(3)')?.textContent.trim();
-        
-        if (origin && destination) {
-          const originInput = page.querySelector('#origin-input');
-          const destInput = page.querySelector('#dest-input');
-          const submitBtn = page.querySelector('#submit-route');
-          
-          if (originInput && destInput) {
-            originInput.value = origin;
-            destInput.value = destination;
-            
-            saveRouteData(origin, destination, 'traveler');
-            updateInputStyle(originInput);
-            updateInputStyle(destInput);
-            
-            if (submitBtn) {
-              submitBtn.disabled = !validateRoute(origin, destination, false);
-            }
-          }
+// Helper function to update input style
+function updateInputStyle(input) {
+  const parent = input.closest('.group');
+  if (!parent) return;
+
+  const value = input.value.trim();
+
+  if (value.length > 0) {
+    parent.classList.add('has-value');
+    if (value.length < 2) {
+      parent.classList.add('border-yellow-500');
+      parent.classList.remove('border-primary/50', 'border-transparent');
+    } else {
+      parent.classList.remove('border-yellow-500');
+      parent.classList.add('border-primary/50');
+    }
+    
+    // Hide placeholder if exists
+    const placeholder = parent.querySelector('.drop-placeholder');
+    if (placeholder) {
+      placeholder.style.opacity = '0';
+      setTimeout(() => {
+        if (input.value.trim()) {
+          placeholder.style.display = 'none';
         }
-      }
-    });
+      }, 300);
+    }
+  } else {
+    parent.classList.remove('has-value', 'border-yellow-500', 'border-primary/50');
+    parent.classList.add('border-transparent');
+    
+    // Show placeholder if exists
+    const placeholder = parent.querySelector('.drop-placeholder');
+    if (placeholder) {
+      placeholder.style.display = 'flex';
+      placeholder.style.opacity = '0.6';
+    }
   }
-  
-  // Remove the suggestions delegation or fix it similarly
-  // ...
 }
 
-// Helper function to show input selector (when both inputs are filled)
-function showInputSelector(originInput, destInput, value, type) {
-  // In a real app, you might show a modal or dropdown
-  // For now, we'll use a simple prompt
-  const choice = prompt(
-    `"${value}" را برای کدام فیلد می‌خواهید؟\n\n1. مبدأ\n2. مقصد\n\nعدد مورد نظر را وارد کنید:`
-  );
-
-  if (choice === '1') {
-    originInput.value = value;
-    originInput.focus();
-  } else if (choice === '2') {
-    destInput.value = value;
-    destInput.focus();
-  }
-
-  saveRouteData(originInput.value, destInput.value, type);
-}
-
-// Utility Functions (same as before, but with minor improvements)
-
+// Function to save route data
 function saveRouteData(origin, destination, type = 'cargo') {
   const data = {
     origin: origin.trim(),
@@ -468,6 +409,7 @@ function saveRouteData(origin, destination, type = 'cargo') {
   }
 }
 
+// Function to load saved route data
 function loadSavedRouteData(originInput, destInput, type = 'cargo') {
   try {
     let savedData;
@@ -488,6 +430,7 @@ function loadSavedRouteData(originInput, destInput, type = 'cargo') {
   }
 }
 
+// Function to validate route
 function validateRoute(origin, destination, showAlert = true) {
   origin = origin.trim();
   destination = destination.trim();
@@ -516,40 +459,50 @@ function validateRoute(origin, destination, showAlert = true) {
   return true;
 }
 
+// Function to show toast notification
 function showToast(message, type = 'info') {
+  // Remove any existing toasts
+  document.querySelectorAll('.custom-toast').forEach(toast => toast.remove());
+  
   // Create toast element
   const toast = document.createElement('div');
-  toast.className = `fixed top-4 left-1/2 transform -translate-x-1/2 z-50 px-6 py-3 rounded-lg shadow-lg ${type === 'error' ? 'bg-red-500 text-white' : 'bg-blue-500 text-white'
-    }`;
-  toast.textContent = message;
+  toast.className = `custom-toast fixed top-4 left-4 right-4 z-50 p-4 rounded-xl shadow-lg ${type === 'error' ? 'bg-red-500 text-white' : 
+                    type === 'success' ? 'bg-emerald-500 text-white' : 'bg-blue-500 text-white'}`;
+  
+  toast.innerHTML = `
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+        <span class="material-symbols-outlined">
+          ${type === 'error' ? 'error' : type === 'success' ? 'check_circle' : 'info'}
+        </span>
+      </div>
+      <div class="flex-1">
+        <p class="font-medium">${message}</p>
+      </div>
+      <button class="toast-close text-white/80 hover:text-white">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+  `;
 
   document.body.appendChild(toast);
 
-  // Remove toast after 3 seconds
+  // Add animation
+  toast.style.animation = 'slideDown 0.3s ease-out';
+  
+  // Close button
+  toast.querySelector('.toast-close').addEventListener('click', () => {
+    toast.style.animation = 'slideUp 0.3s ease-out';
+    setTimeout(() => toast.remove(), 300);
+  });
+
+  // Auto-remove after 3 seconds
   setTimeout(() => {
-    toast.remove();
-  }, 3000);
-}
-
-function updateInputStyle(input) {
-  const parent = input.closest('.group');
-  if (!parent) return;
-
-  const value = input.value.trim();
-
-  if (value.length > 0) {
-    parent.classList.add('has-value');
-    if (value.length < 2) {
-      parent.classList.add('border-yellow-500');
-      parent.classList.remove('border-primary/50', 'border-transparent');
-    } else {
-      parent.classList.remove('border-yellow-500');
-      parent.classList.add('border-primary/50');
+    if (toast.parentNode) {
+      toast.style.animation = 'slideUp 0.3s ease-out';
+      setTimeout(() => toast.remove(), 300);
     }
-  } else {
-    parent.classList.remove('has-value', 'border-yellow-500', 'border-primary/50');
-    parent.classList.add('border-transparent');
-  }
+  }, 3000);
 }
 
 // Debounce utility
@@ -559,14 +512,414 @@ function debounce(func, delay) {
   debounceTimer = setTimeout(func, delay);
 }
 
+// Function to navigate to route
 function navigateToRoute(routeName) {
-  const routeChangeEvent = new CustomEvent('routeChange', {
-    detail: { route: routeName }
-  });
-  window.dispatchEvent(routeChangeEvent);
+  if (window.router) {
+    window.router.navigate(routeName);
+  } else {
+    window.location.hash = `#/${routeName}`;
+  }
 }
 
-// Export utility functions
+// Add animation styles if not already present
+if (!document.querySelector('#toast-animations')) {
+  const style = document.createElement('style');
+  style.id = 'toast-animations';
+  style.textContent = `
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes slideUp {
+      from { transform: translateY(0); opacity: 1; }
+      to { transform: translateY(-100%); opacity: 0; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+// ===================== DRAG & DROP FUNCTIONALITY =====================
+
+function initDragAndDrop(page, type) {
+  console.log(`Initializing drag & drop for ${type}...`);
+  
+  // Add CSS for drag & drop
+  addDragDropStyles();
+  
+  // Make input fields droppable
+  const originInput = type === 'cargo' 
+    ? page.querySelector('input[placeholder*="مبدأ"]') || page.querySelectorAll('input[type="text"]')[0]
+    : page.querySelector('#origin-input');
+    
+  const destInput = type === 'cargo'
+    ? page.querySelector('input[placeholder*="مقصد"]') || page.querySelectorAll('input[type="text"]')[1]
+    : page.querySelector('#dest-input');
+  
+  if (originInput) makeDroppable(originInput, 'origin', type);
+  if (destInput) makeDroppable(destInput, 'destination', type);
+  
+  // Create drag ghost element
+  createDragGhost();
+}
+
+function addDragDropStyles() {
+  if (document.getElementById('drag-drop-styles')) return;
+  
+  const style = document.createElement('style');
+  style.id = 'drag-drop-styles';
+  style.textContent = `
+    .draggable {
+      cursor: grab;
+      user-select: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    
+    .draggable:active {
+      cursor: grabbing;
+    }
+    
+    .dragging {
+      opacity: 0.5;
+      transform: scale(0.95);
+      z-index: 1000;
+    }
+    
+    .drop-target {
+      transition: all 0.3s ease;
+    }
+    
+    .drop-hover {
+      border-color: #3b82f6 !important;
+      background-color: rgba(59, 130, 246, 0.05) !important;
+      transform: scale(1.02);
+    }
+    
+    .drop-success {
+      border-color: #10b981 !important;
+      background-color: rgba(16, 185, 129, 0.05) !important;
+    }
+    
+    #drag-ghost {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.8;
+      transform: translate(-50%, -50%);
+      background: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      border: 2px solid #3b82f6;
+      max-width: 200px;
+      display: none;
+    }
+    
+    #drag-ghost .drag-content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      color: #1e293b;
+    }
+    
+    #drag-ghost .drag-icon {
+      color: #3b82f6;
+    }
+    
+    .drag-indicator {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #3b82f6;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    
+    .draggable:hover .drag-indicator {
+      opacity: 1;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function createDragGhost() {
+  if (document.getElementById('drag-ghost')) return;
+  
+  const ghost = document.createElement('div');
+  ghost.id = 'drag-ghost';
+  ghost.innerHTML = `
+    <div class="drag-content">
+      <span class="material-symbols-outlined drag-icon">drag_indicator</span>
+      <span class="drag-text"></span>
+    </div>
+  `;
+  document.body.appendChild(ghost);
+}
+
+function makeDraggable(element, type, originInput, destInput) {
+  if (!element) return;
+  
+  // Add draggable class
+  element.classList.add('draggable');
+  
+  // Add drag indicator
+  const indicator = document.createElement('div');
+  indicator.className = 'drag-indicator';
+  indicator.innerHTML = '<span class="material-symbols-outlined" style="font-size: 14px">drag_indicator</span>';
+  element.appendChild(indicator);
+  
+  let isDragging = false;
+  let startX, startY;
+  let dragData = null;
+  
+  // Touch events for mobile
+  element.addEventListener('touchstart', handleDragStart, { passive: false });
+  element.addEventListener('touchmove', handleDragMove, { passive: false });
+  element.addEventListener('touchend', handleDragEnd);
+  
+  // Mouse events for desktop
+  element.addEventListener('mousedown', handleDragStart);
+  
+  function handleDragStart(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    isDragging = true;
+    
+    // Get drag data from the element
+    const title = element.querySelector('.text-sm.font-bold')?.textContent.trim();
+    const airport = element.dataset.airport || '';
+    const code = element.dataset.code || '';
+    
+    dragData = {
+      text: airport && code ? `${airport} (${code})` : title,
+      element: element,
+      type: type
+    };
+    
+    // Set starting position
+    if (e.type === 'touchstart') {
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    } else {
+      startX = e.clientX;
+      startY = e.clientY;
+    }
+    
+    // Add dragging class
+    element.classList.add('dragging');
+    
+    // Show drag ghost
+    const ghost = document.getElementById('drag-ghost');
+    ghost.querySelector('.drag-text').textContent = dragData.text;
+    ghost.style.display = 'block';
+    
+    // Add global event listeners
+    document.addEventListener('mousemove', handleDragMove);
+    document.addEventListener('mouseup', handleDragEnd);
+    document.addEventListener('touchmove', handleDragMove, { passive: false });
+    document.addEventListener('touchend', handleDragEnd);
+  }
+  
+  function handleDragMove(e) {
+    if (!isDragging) return;
+    e.preventDefault();
+    
+    let clientX, clientY;
+    
+    if (e.type === 'touchmove') {
+      clientX = e.touches[0].clientX;
+      clientY = e.touches[0].clientY;
+    } else {
+      clientX = e.clientX;
+      clientY = e.clientY;
+    }
+    
+    // Move ghost element
+    const ghost = document.getElementById('drag-ghost');
+    ghost.style.left = clientX + 'px';
+    ghost.style.top = clientY + 'px';
+    
+    // Check for drop targets
+    const elements = document.elementsFromPoint(clientX, clientY);
+    const dropTarget = elements.find(el => el.classList.contains('drop-target'));
+    
+    // Update drop target styles
+    document.querySelectorAll('.drop-target').forEach(target => {
+      target.classList.remove('drop-hover');
+    });
+    
+    if (dropTarget) {
+      dropTarget.classList.add('drop-hover');
+    }
+  }
+  
+ function handleDragEnd(e) {
+  if (!isDragging) return;
+  
+  isDragging = false;
+  
+  // Remove dragging class
+  element.classList.remove('dragging');
+  
+  // Hide drag ghost
+  const ghost = document.getElementById('drag-ghost');
+  ghost.style.display = 'none';
+  
+  // Get drop position
+  let clientX, clientY;
+  
+  if (e.type === 'touchend') {
+    if (!e.changedTouches[0]) return;
+    clientX = e.changedTouches[0].clientX;
+    clientY = e.changedTouches[0].clientY;
+  } else {
+    clientX = e.clientX;
+    clientY = e.clientY;
+  }
+  
+  // Find drop target
+  const elements = document.elementsFromPoint(clientX, clientY);
+  const dropTarget = elements.find(el => el.classList.contains('drop-target'));
+  
+  // Reset all drop targets
+  document.querySelectorAll('.drop-target').forEach(target => {
+    target.classList.remove('drop-hover', 'drop-success');
+  });
+  
+  // Handle drop
+  if (dropTarget && dragData) {
+    const field = dropTarget.dataset.dropField;
+    const input = dropTarget;
+    
+    // Animate success
+    dropTarget.classList.add('drop-success');
+    setTimeout(() => {
+      dropTarget.classList.remove('drop-success');
+    }, 500);
+    
+    // Update input value
+    input.value = dragData.text;
+    
+    // Trigger input event to update styles and hide placeholder
+    const inputEvent = new Event('input', { bubbles: true });
+    input.dispatchEvent(inputEvent);
+    
+    // Also trigger change event for good measure
+    const changeEvent = new Event('change', { bubbles: true });
+    input.dispatchEvent(changeEvent);
+    
+    updateInputStyle(input);
+    
+    // Save data
+    if (field === 'origin') {
+      saveRouteData(input.value, destInput.value, type);
+    } else if (field === 'destination') {
+      saveRouteData(originInput.value, input.value, type);
+    }
+    
+    // Focus the input
+    input.focus();
+    
+    // Show success feedback
+    showToast(`"${dragData.text}" به ${field === 'origin' ? 'مبدأ' : 'مقصد'} اضافه شد`, 'success');
+  }
+  
+  // Cleanup
+  dragData = null;
+  
+  // Remove global event listeners
+  document.removeEventListener('mousemove', handleDragMove);
+  document.removeEventListener('mouseup', handleDragEnd);
+  document.removeEventListener('touchmove', handleDragMove);
+  document.removeEventListener('touchend', handleDragEnd);
+}
+}
+
+function makeDroppable(inputElement, field, type) {
+  if (!inputElement) return;
+  
+  // Add drop target class and data attribute
+  inputElement.classList.add('drop-target');
+  inputElement.dataset.dropField = field;
+  inputElement.dataset.dropType = type;
+  
+  // Check if placeholder already exists
+  let placeholder = inputElement.parentElement.querySelector('.drop-placeholder');
+  
+  // Create placeholder if it doesn't exist
+  if (!placeholder && inputElement.type === 'text') {
+    placeholder = document.createElement('div');
+    placeholder.className = 'drop-placeholder';
+    placeholder.innerHTML = `
+      <span class="material-symbols-outlined" style="color: #94a3b8; margin-left: 8px;">
+        ${field === 'origin' ? 'flight_takeoff' : 'flight_land'}
+      </span>
+      <span style="color: #94a3b8; font-size: 14px;">
+        ${field === 'origin' ? 'مبدأ را اینجا رها کنید' : 'مقصد را اینجا رها کنید'}
+      </span>
+    `;
+    
+    // Style the placeholder
+    placeholder.style.cssText = `
+      position: absolute;
+      top: 50%;
+      right: 16px;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      pointer-events: none;
+      opacity: 0.6;
+      z-index: 5;
+      transition: opacity 0.3s ease;
+    `;
+    
+    // Make sure parent has relative positioning
+    if (window.getComputedStyle(inputElement.parentElement).position === 'static') {
+      inputElement.parentElement.style.position = 'relative';
+    }
+    
+    inputElement.parentElement.appendChild(placeholder);
+  }
+  
+  // Update placeholder visibility based on input value
+  const updatePlaceholder = () => {
+    if (placeholder) {
+      if (inputElement.value.trim()) {
+        placeholder.style.opacity = '0';
+        placeholder.style.display = 'none';
+      } else {
+        placeholder.style.opacity = '0.6';
+        placeholder.style.display = 'flex';
+      }
+    }
+  };
+  
+  // Initialize visibility
+  updatePlaceholder();
+  
+  // Update on input and drag events
+  inputElement.addEventListener('input', updatePlaceholder);
+  inputElement.addEventListener('change', updatePlaceholder);
+  
+  // Also update when element gets focus/blur
+  inputElement.addEventListener('focus', () => {
+    if (placeholder && !inputElement.value.trim()) {
+      placeholder.style.opacity = '0.3';
+    }
+  });
+  
+  inputElement.addEventListener('blur', updatePlaceholder);
+}
+// Export utility functions (if needed elsewhere)
 export function getCurrentRoute(type = 'cargo') {
   try {
     const key = type === 'cargo' ? 'cargoRoute' : 'travelerRoute';
@@ -588,3 +941,156 @@ export function clearRouteData(type = 'cargo') {
   }
   console.log(`${type} route data cleared`);
 }
+// ===================== HELPER FUNCTIONS =====================
+
+// Helper function to handle suggestion clicks
+function handleSuggestionClick(item, originInput, destInput, type, submitBtn = null) {
+  const title = item.querySelector('.text-sm.font-bold')?.textContent.trim();
+  const airport = item.dataset.airport || '';
+  const code = item.dataset.code || '';
+
+  let displayText = title;
+  if (airport && code) {
+    displayText = `${airport} (${code})`;
+  }
+
+  console.log('Suggestion clicked:', { title, airport, code, displayText });
+
+  // Determine which input is focused
+  const focusedInput = document.activeElement;
+
+  if (focusedInput === originInput) {
+    originInput.value = displayText;
+    updateInputStyle(originInput);
+  } else if (focusedInput === destInput) {
+    destInput.value = displayText;
+    updateInputStyle(destInput);
+  } else {
+    // If no input is focused, check which one is empty or fill both
+    if (!originInput.value.trim()) {
+      originInput.value = displayText;
+      originInput.focus();
+      updateInputStyle(originInput);
+    } else if (!destInput.value.trim()) {
+      destInput.value = displayText;
+      destInput.focus();
+      updateInputStyle(destInput);
+    } else {
+      // Both inputs have values - let user choose
+      showInputSelector(originInput, destInput, displayText, type);
+    }
+  }
+
+  // Save to localStorage
+  saveRouteData(originInput.value, destInput.value, type);
+
+  // Update submit button state if provided
+  if (submitBtn) {
+    const isValid = validateRoute(originInput.value, destInput.value, false);
+    submitBtn.disabled = !isValid;
+  }
+}
+
+// Helper function to show input selector (when both inputs are filled)
+function showInputSelector(originInput, destInput, value, type) {
+  // Create a beautiful modal
+  const modal = document.createElement('div');
+  modal.className = 'fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4';
+  modal.innerHTML = `
+    <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 max-w-sm w-full shadow-xl input-selector-modal">
+      <div class="text-center mb-6">
+        <div class="w-12 h-12 mx-auto mb-4 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+          <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">flight_takeoff</span>
+        </div>
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">انتخاب فیلد</h3>
+        <p class="text-slate-600 dark:text-slate-300 text-sm">
+          "${value}"
+        </p>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">را برای کدام فیلد می‌خواهید؟</p>
+      </div>
+      
+      <div class="space-y-3">
+        <button class="input-selector-option w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-blue-500 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors text-right"
+                data-field="origin">
+          <div class="flex items-center justify-between">
+            <span class="material-symbols-outlined text-blue-500">arrow_right_alt</span>
+            <div class="text-right flex-1 mr-3">
+              <div class="font-medium text-slate-900 dark:text-white">مبدأ (خروج)</div>
+              <div class="text-sm text-slate-500 dark:text-slate-400 mt-1">${originInput.value || 'خالی'}</div>
+            </div>
+          </div>
+        </button>
+        
+        <button class="input-selector-option w-full p-4 rounded-xl border border-slate-200 dark:border-slate-700 hover:border-emerald-500 dark:hover:border-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 transition-colors text-right"
+                data-field="destination">
+          <div class="flex items-center justify-between">
+            <span class="material-symbols-outlined text-emerald-500">arrow_right_alt</span>
+            <div class="text-right flex-1 mr-3">
+              <div class="font-medium text-slate-900 dark:text-white">مقصد (ورود)</div>
+              <div class="text-sm text-slate-500 dark:text-slate-400 mt-1">${destInput.value || 'خالی'}</div>
+            </div>
+          </div>
+        </button>
+      </div>
+      
+      <div class="mt-6 pt-6 border-t border-slate-100 dark:border-slate-700">
+        <button class="input-selector-cancel w-full py-3 rounded-xl bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-300 font-medium transition-colors">
+          انصراف
+        </button>
+      </div>
+    </div>
+  `;
+
+  // Add modal to page
+  document.body.appendChild(modal);
+  document.body.style.overflow = 'hidden';
+
+  // Handle option selection
+  modal.querySelectorAll('.input-selector-option').forEach(option => {
+    option.addEventListener('click', function() {
+      const field = this.dataset.field;
+      
+      if (field === 'origin') {
+        originInput.value = value;
+        originInput.focus();
+      } else if (field === 'destination') {
+        destInput.value = value;
+        destInput.focus();
+      }
+      
+      updateInputStyle(originInput);
+      updateInputStyle(destInput);
+      saveRouteData(originInput.value, destInput.value, type);
+      
+      modal.remove();
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Handle cancel button
+  modal.querySelector('.input-selector-cancel').addEventListener('click', () => {
+    modal.remove();
+    document.body.style.overflow = '';
+  });
+
+  // Close modal when clicking outside
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.remove();
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Close with Escape key
+  const handleEscape = (e) => {
+    if (e.key === 'Escape') {
+      modal.remove();
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEscape);
+    }
+  };
+  document.addEventListener('keydown', handleEscape);
+}
+
+// ... rest of your existing utility functions (setupInputHandlers, saveRouteData, etc.)
+// Keep all the other functions exactly as you have them
