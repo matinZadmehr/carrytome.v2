@@ -6,8 +6,8 @@ import { hideAppLoader, forceRemoveLoader, checkLoaderStyles } from './utils/dom
 import { initSliders } from './components/sliders.js';
 import { initializeOrdersStore } from './utils/order-store.js';
 import { initOrderSubmission } from './utils/order-submission.js';
-
-
+import { initFlightFiltering, setupFlightPage } from './components/flight-filter.js';
+setupFlightPage();
 
 // Import page initializers with error handling
 const PAGE_INITIALIZERS = {};
@@ -22,7 +22,7 @@ async function loadPageInitializers() {
     { key: 'my-order', path: './pages/my-order.js', init: 'initMyOrderPage' },
     { key: 'my-trips', path: './pages/my-trips.js', init: 'initMyTripsPage' },
     { key: 'cargo-cat', path: './pages/cargo-categories.js', init: 'initCargoCategories' },
-    { key: 'registered-flight', path: './pages/registered-flight.js', init: 'initRegisteredFlightFilters' }
+    { key: 'registered-flight', path: './pages/registered-flight.js', init: 'initRegisteredFlightFilters'}
   ];
 
   for (const page of pages) {
