@@ -1,9 +1,9 @@
-// utils/orders-store.js - FIXED VERSION
+// utils/orders-store.js
 import { getOrders, addOrder as addCartOrder } from '../components/cart.js';
 
 console.log('📦 orders-store.js loading...');
 
-// Convert cart order format to my-order page format
+// Convert a cart order to the format used in My Orders page
 function mapCartOrderToDisplayOrder(cartOrder) {
   return {
     id: cartOrder.id || Date.now(),
@@ -14,48 +14,45 @@ function mapCartOrderToDisplayOrder(cartOrder) {
     from: cartOrder.from || 'تهران (IKA)',
     to: cartOrder.to || 'دبی (DXB)',
     action: cartOrder.type === 'carrier' ? 'حمل بار' : 'سپردن مرسوله',
-    details: { 
+    details: {
       item: cartOrder.item || 'مرسوله',
       ...(cartOrder.details || {})
     }
   };
 }
 
-// Get all dynamic orders (from cart)
+// Get all orders from cart/localStorage
 export function getDynamicOrders() {
   try {
-    const cartOrders = getOrders(); // Using imported function
+    const cartOrders = getOrders(); // Always from real storage
     console.log(`📄 Got ${cartOrders.length} orders from cart`);
-    
-    return cartOrders.map(order => mapCartOrderToDisplayOrder(order));
+    return cartOrders.map(mapCartOrderToDisplayOrder);
   } catch (error) {
     console.error('❌ Error getting dynamic orders:', error);
     return [];
   }
 }
 
-// Add a new order to cart
+// Add a new order to cart/localStorage
 export function addDynamicOrder(order) {
   try {
     console.log('➕ Adding dynamic order:', order);
-    
-    // Map to cart format
+
     const cartOrder = {
+      id: order.id || Date.now(),
+      type: order.type || 'sender',
       from: order.from,
       to: order.to,
       date: order.dateISO || new Date().toISOString().split('T')[0],
-      type: order.type || 'sender',
       status: order.statusText || 'در انتظار تایید',
       statusColor: order.statusColor || 'amber',
       item: order.details?.item || 'مرسوله',
-      details: order.details || {},
-      id: order.id || Date.now()
+      details: order.details || {}
     };
-    
-    // Use imported addCartOrder function
+
     const addedOrder = addCartOrder(cartOrder);
     console.log('✅ Order added via cart.js');
-    
+
     return addedOrder;
   } catch (error) {
     console.error('❌ Error adding dynamic order:', error);
@@ -63,11 +60,11 @@ export function addDynamicOrder(order) {
   }
 }
 
-// Initialize the store
+// Initialize orders store: only load real orders from storage
 export function initializeOrdersStore() {
   console.log('📦 Initializing orders store...');
   try {
-    const orders = getOrders(); // Using imported function
+    const orders = getOrders(); // Only real orders
     console.log(`📊 Found ${orders.length} existing orders`);
     return orders;
   } catch (error) {
@@ -76,9 +73,9 @@ export function initializeOrdersStore() {
   }
 }
 
-// Get order by ID
+// Get a specific order by ID
 export function getOrderById(orderId) {
-  const orders = getOrders(); // Using imported function
+  const orders = getOrders(); // Only from real storage
   return orders.find(order => order.id == orderId);
 }
 

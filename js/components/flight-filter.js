@@ -38,7 +38,7 @@ function showToast(message, type = 'info') {
   // Close button
   toast.querySelector('.toast-close').addEventListener('click', () => {
     toast.style.animation = 'slideUp 0.3s ease-out';
-    setTimeout(() => toast.remove(), 300);
+    
   });
 
   // Auto-remove after 3 seconds
@@ -459,7 +459,41 @@ export function setupFlightPage() {
     observer.observe(page, { attributes: true, attributeFilter: ['class'] });
   });
 }
+window.addEventListener('pageshow', () => {
+  // Allow initFlightFiltering to run again
+  isInitialized = false;
 
+  // If filtering was already initialized, force a clean reset
+  const page = document.querySelector('[data-page="registered-flight"]');
+  if (!page) return;
+
+  // Reset UI elements safely (no dependency on init order)
+  const priceRange = page.querySelector('#registered-flight-price-range');
+  const priceDisplay = page.querySelector('#registered-flight-price-display');
+  const categorySelect = page.querySelector('#flight-category-select');
+
+  if (priceRange) {
+    priceRange.value = 100;
+    priceRange.dispatchEvent(new Event('input'));
+  }
+
+  if (priceDisplay) {
+    priceDisplay.textContent = '100 OMR';
+  }
+
+  if (categorySelect) {
+    categorySelect.value = '';
+    categorySelect.dispatchEvent(new Event('change'));
+  }
+
+  // Show all cards
+  page.querySelectorAll('.rounded-2xl.bg-surface-light').forEach(card => {
+    card.style.display = 'flex';
+    card.classList.remove('filtered-out');
+  });
+
+  console.log('Filters hard-reset on page load');
+});
 // Auto-initialize if this script is loaded
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', setupFlightPage);

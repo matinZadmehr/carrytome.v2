@@ -39,7 +39,7 @@ export function saveTrip(tripOrTrips) {
     // Add new trip with ID and timestamp
     const tripWithId = {
       ...tripOrTrips,
-      id: tripOrTrips.id || Date.now(),
+      id: tripOrTrips.id || crypto.randomUUID(),
       createdAt: new Date().toISOString()
     };
     trips.push(tripWithId);

@@ -20,7 +20,6 @@ async function loadPageInitializers() {
     { key: 'traveler-route', path: './components/route-selection.js', init: 'initTravelerRouteSelection'},
     { key: 'traveler-flight-date', path: './pages/traveler-flight-date.js', init: 'initTravelerFlightDate' },
     { key: 'my-order', path: './pages/my-order.js', init: 'initMyOrderPage' },
-    { key: 'my-trips', path: './pages/my-trips.js', init: 'initMyTripsPage' },
     { key: 'cargo-cat', path: './pages/cargo-categories.js', init: 'initCargoCategories' },
     { key: 'registered-flight', path: './pages/registered-flight.js', init: 'initRegisteredFlightFilters'}
   ];
