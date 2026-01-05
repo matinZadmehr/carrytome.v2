@@ -1,88 +1,106 @@
-import { createElement } from './dom.js';
-
-let notificationStylesAdded = false;
-
-function addNotificationStyles() {
-    if (notificationStylesAdded) return;
-
-    const style = document.createElement('style');
-    style.textContent = `
-    @keyframes slideDown {
-      from { transform: translateY(-100%); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    @keyframes slideUp {
-      from { transform: translateY(0); opacity: 1; }
-      to { transform: translateY(-100%); opacity: 0; }
-    }
-    .notification {
-      animation: slideDown 0.3s ease-out;
-    }
-    .notification.hiding {
-      animation: slideUp 0.3s ease-out;
-    }
-  `;
-    document.head.appendChild(style);
-    notificationStylesAdded = true;
+export function loadTrips() {
+  try {
+    const trips = JSON.parse(localStorage.getItem('my_trips') || '[]');
+    console.log(`📄 Loaded ${trips.length} trips from storage`);
+    return trips;
+  } catch (error) {
+    console.error('❌ Error loading trips:', error);
+    return [];
+  }
 }
 
-export function showNotification(message, type = 'info', duration = 3000) {
-    addNotificationStyles();
-
-    const typeClasses = {
-        success: 'bg-emerald-500 text-white',
-        error: 'bg-red-500 text-white',
-        warning: 'bg-amber-500 text-white',
-        info: 'bg-blue-500 text-white'
-    };
-
-    const typeIcons = {
-        success: 'check_circle',
-        error: 'error',
-        warning: 'warning',
-        info: 'info'
-    };
-
-    const notification = createElement('div', {
-        className: `fixed top-4 left-4 right-4 z-50 p-4 rounded-xl shadow-lg notification ${typeClasses[type] || typeClasses.info}`
-    }, `
-    <div class="flex items-center gap-3">
-      <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
-        <span class="material-symbols-outlined">${typeIcons[type] || 'info'}</span>
-      </div>
-      <div class="flex-1">
-        <p class="font-medium">${message}</p>
-      </div>
-      <button class="close-notification text-white/80 hover:text-white">
-        <span class="material-symbols-outlined">close</span>
-      </button>
-    </div>
-  `);
-
-    document.body.appendChild(notification);
-
-    const closeBtn = notification.querySelector('.close-notification');
-    closeBtn.addEventListener('click', () => closeNotification(notification));
-
-    const timeout = setTimeout(() => closeNotification(notification), duration);
-
-    notification._cleanup = () => {
-        clearTimeout(timeout);
-        closeBtn.removeEventListener('click', () => { });
-    };
-
-    return notification;
+/* Save trips (array) */
+export function saveTrips(trips) {
+  try {
+    localStorage.setItem('my_trips', JSON.stringify(trips));
+    console.log(`💾 Saved ${trips.length} trips to storage`);
+    return true;
+  } catch (error) {
+    console.error('❌ Error saving trips:', error);
+    return false;
+  }
 }
 
-export function closeNotification(notification) {
-    if (!notification || !notification.parentNode) return;
+/* Save a single trip (alias for consistency) */
+export function saveTrip(tripOrTrips) {
+  // If it's an array, save as trips
+  if (Array.isArray(tripOrTrips)) {
+    return saveTrips(tripOrTrips);
+  }
+  
+  // If it's a single trip, add/update in existing trips
+  const trips = loadTrips();
+  const existingIndex = trips.findIndex(t => t.id === tripOrTrips.id);
+  
+  if (existingIndex !== -1) {
+    // Update existing trip
+    trips[existingIndex] = { ...trips[existingIndex], ...tripOrTrips };
+  } else {
+    // Add new trip with ID and timestamp
+    const tripWithId = {
+      ...tripOrTrips,
+      id: tripOrTrips.id || Date.now(),
+      createdAt: new Date().toISOString()
+    };
+    trips.push(tripWithId);
+  }
+  
+  return saveTrips(trips);
+}
 
-    notification.classList.add('hiding');
-    notification._cleanup?.();
+/* Remove a trip by ID */
+export function removeTrip(tripId) {
+  const trips = loadTrips();
+  const initialLength = trips.length;
+  const filteredTrips = trips.filter(trip => trip.id !== tripId);
+  
+  if (filteredTrips.length < initialLength) {
+    saveTrips(filteredTrips);
+    console.log(`🗑️ Removed trip: ${tripId}`);
+    return true;
+  }
+  
+  console.log(`⚠️ Trip not found: ${tripId}`);
+  return false;
+}
 
-    setTimeout(() => {
-        if (notification.parentNode) {
-            notification.remove();
-        }
-    }, 300);
+/* Add a new trip */
+export function addTrip(trip) {
+  const trips = loadTrips();
+  
+  const tripWithId = {
+    ...trip,
+    id: trip.id || Date.now(),
+    createdAt: new Date().toISOString(),
+    status: 'submitted',
+    submittedDate: new Date().toISOString()
+  };
+  
+  trips.push(tripWithId);
+  saveTrips(trips);
+  
+  console.log(`➕ Added new trip: ${tripWithId.id}`);
+  return tripWithId;
+}
+
+/* Update trip status */
+export function updateTripStatus(tripId, newStatus) {
+  const trips = loadTrips();
+  const trip = trips.find(t => t.id === tripId);
+  
+  if (trip) {
+    trip.status = newStatus;
+    trip.updatedAt = new Date().toISOString();
+    saveTrips(trips);
+    console.log(`✏️ Updated trip ${tripId} status to: ${newStatus}`);
+    return true;
+  }
+  
+  return false;
+}
+
+/* Clear all trips */
+export function clearTrips() {
+  localStorage.removeItem('my_trips');
+  console.log('🧹 Cleared all trips');
 }

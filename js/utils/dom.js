@@ -1,14 +1,56 @@
 // DOM utility functions
 
 export function hideAppLoader() {
+    console.log('🎯 hideAppLoader called');
+    
     const loader = document.getElementById("app-loader");
-    if (!loader) return;
+    if (!loader) {
+        console.warn('⚠️ No app-loader element found');
+        return;
+    }
+    
+    console.log('👁️ Hiding loader element');
+    
+    // Add hidden class
     loader.classList.add("app-loader--hidden");
+    
+    // Remove from DOM after animation
     setTimeout(() => {
+        if (loader && loader.parentNode) {
+            console.log('🗑️ Removing loader from DOM');
+            loader.remove();
+        }
+    }, 300);
+}
+
+// Alternative: Force remove loader with fallback
+export function forceRemoveLoader() {
+    console.log('⚡ Force removing loader');
+    
+    const loader = document.getElementById("app-loader");
+    if (loader) {
+        loader.style.display = 'none';
         if (loader.parentNode) {
             loader.remove();
         }
-    }, 260);
+    }
+    
+    // Also remove any overlay
+    const overlays = document.querySelectorAll('.loader-overlay, .loading-screen');
+    overlays.forEach(el => {
+        el.style.display = 'none';
+        if (el.parentNode) el.remove();
+    });
+    
+    // Ensure body is visible
+    document.body.style.overflow = 'auto';
+}
+
+export function showLoader() {
+    const loader = document.getElementById("app-loader");
+    if (loader) {
+        loader.classList.remove("app-loader--hidden");
+    }
 }
 
 export function createRouteProgress() {
@@ -34,7 +76,7 @@ export function createElement(tag, attributes = {}, children = null) {
         } else if (key === 'textContent') {
             element.textContent = value;
         } else if (key === 'innerHTML') {
-            element.innerHTML = value;
+            element.innerHTML = value;  // This is correct
         } else if (key.startsWith('data-')) {
             element.setAttribute(key, value);
         } else if (key.startsWith('on') && typeof value === 'function') {
@@ -47,13 +89,23 @@ export function createElement(tag, attributes = {}, children = null) {
     if (Array.isArray(children)) {
         children.forEach(child => {
             if (typeof child === 'string') {
-                element.appendChild(document.createTextNode(child));
+                // FIX THIS LINE: Use innerHTML for strings with HTML
+                if (child.includes('<')) {
+                    element.innerHTML += child;
+                } else {
+                    element.appendChild(document.createTextNode(child));
+                }
             } else if (child instanceof Node) {
                 element.appendChild(child);
             }
         });
     } else if (typeof children === 'string') {
-        element.textContent = children;
+        // FIX THIS LINE: Check if string contains HTML
+        if (children.includes('<')) {
+            element.innerHTML = children;
+        } else {
+            element.textContent = children;
+        }
     } else if (children instanceof Node) {
         element.appendChild(children);
     }
@@ -79,4 +131,22 @@ export function toggleElement(el, show) {
 
 export function getPageElement(pageName) {
     return document.querySelector(`[data-page="${pageName}"]`);
+}
+
+// Check if loader CSS exists
+export function checkLoaderStyles() {
+    const loader = document.getElementById("app-loader");
+    if (!loader) {
+        console.warn('❌ No loader element found in DOM');
+        return false;
+    }
+    
+    const styles = window.getComputedStyle(loader);
+    console.log('📊 Loader styles:', {
+        display: styles.display,
+        opacity: styles.opacity,
+        visibility: styles.visibility
+    });
+    
+    return true;
 }

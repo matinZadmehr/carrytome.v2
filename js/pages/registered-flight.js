@@ -1,6 +1,8 @@
 import { saveTrip, loadTrips, removeTrip } from '../utils/storage.js';
 import { showNotification } from '../utils/notifications.js';
 import { createElement } from '../utils/dom.js';
+import { addOrder } from '../components/cart.js';
+import { addDynamicOrder } from '../utils/order-store.js';
 
 const FLIGHT_DATA = [
     {
@@ -56,21 +58,58 @@ const FLIGHT_DATA = [
 let filteredFlights = [...FLIGHT_DATA];
 let currentFilter = 'all';
 
-export function initRegisteredFlightFilters() {
-    const page = document.querySelector('[data-page="registered-flight"]');
-    if (!page) return;
 
-    // Load submitted status
-    const submittedTrips = loadTrips();
-    FLIGHT_DATA.forEach(flight => {
-        flight.submitted = submittedTrips.some(trip => trip.id === flight.id);
+  export function initRegisteredFlightFilters() {
+
+  document.querySelectorAll(
+    '#page-registered-flight button'
+  ).forEach(button => {
+
+    if (!button.textContent.includes('افزودن')) return;
+
+    button.addEventListener('click', () => {
+      const card = button.closest('.group');
+      if (!card) return;
+
+      const title = card.querySelector('h3')?.innerText || '';
+      const price = card.querySelector('.text-primary')?.innerText || '';
+      const date = card.querySelector('[class*="calendar"]')
+        ?.parentElement?.innerText || '—';
+
+      const route = title.replace('✈️', '').split('→');
+
+      const order = {
+        id: Date.now(),
+        type: 'carrier',
+        status: 'waiting',
+        statusText: 'در انتظار تایید',
+        statusColor: 'amber',
+        icon: 'flight_takeoff',
+        iconBg: 'bg-amber-50 dark:bg-amber-900/30',
+        iconText: 'text-amber-600',
+        from: route[0]?.trim() || '—',
+        to: route[1]?.trim() || '—',
+        action: 'حمل بار',
+        date,
+        details: {
+          capacity: '—',
+          status: 'جدید',
+          price,
+          priceLabel: 'پیشنهاد'
+        },
+        showStats: true,
+        showDetailsButton: false
+      };
+
+      addDynamicOrder(order);
+
+      // UX feedback
+      button.disabled = true;
+      button.textContent = 'افزوده شد ✓';
+      button.classList.add('bg-emerald-500');
     });
-
-    initFilters(page);
-    renderFlights(page);
-    initFlightActions(page);
+  });
 }
-
 function initFilters(page) {
     const buttons = Array.from(page.querySelectorAll('div.flex.gap-3.px-4.pb-4 button'));
 
