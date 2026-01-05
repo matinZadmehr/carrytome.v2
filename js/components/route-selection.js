@@ -14,9 +14,9 @@ export function initRouteSelection() {
   initDragAndDrop(page, 'cargo');
 
   // Get DOM elements
-  const originInput = page.querySelector('input[placeholder*="مبدأ"]') ||
+  let originInput = page.querySelector('input[placeholder*="مبدأ"]') ||
     page.querySelectorAll('input[type="text"]')[0];
-  const destInput = page.querySelector('input[placeholder*="مقصد"]') ||
+  let destInput = page.querySelector('input[placeholder*="مقصد"]') ||
     page.querySelectorAll('input[type="text"]')[1];
 
   if (!originInput || !destInput) {
@@ -116,8 +116,8 @@ export function initTravelerRouteSelection() {
   initDragAndDrop(page, 'traveler');
 
   // Get DOM elements using specific IDs
-  const originInput = page.querySelector('#origin-input');
-  const destInput = page.querySelector('#dest-input');
+  let originInput = page.querySelector('#origin-input');
+  let destInput = page.querySelector('#dest-input');
   const swapBtn = page.querySelector('#swap-button');
   const submitBtn = page.querySelector('#submit-route');
   const backBtn = page.querySelector('header button[data-href="#"]');
@@ -157,30 +157,77 @@ export function initTravelerRouteSelection() {
           submitBtn.disabled = !validateRoute(origin, destination, false);
         }
       }
-    }, { once: true });
+    }, );
   });
 
   // Setup swap button
   if (swapBtn) {
-    swapBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-      e.stopPropagation();
+  swapBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-      console.log('Swapping inputs');
-      const temp = originInput.value;
-      originInput.value = destInput.value;
-      destInput.value = temp;
+    console.log('Swapping inputs');
+    
+    // Store current values
+    const originValue = originInput.value;
+    const destValue = destInput.value;
+    
+    // Swap values
+    originInput.value = destValue;
+    destInput.value = originValue;
 
-      saveRouteData(originInput.value, destInput.value, 'traveler');
-      updateInputStyle(originInput);
-      updateInputStyle(destInput);
+    // Force trigger input events with all necessary details
+    const triggerEvents = (input) => {
+      // Trigger input event
+      const inputEvent = new Event('input', {
+        bubbles: true,
+        cancelable: true
+      });
+      input.dispatchEvent(inputEvent);
+      
+      // Trigger change event
+      const changeEvent = new Event('change', {
+        bubbles: true,
+        cancelable: true
+      });
+      input.dispatchEvent(changeEvent);
+      
+      // Trigger focus/blur to force style updates
+      input.dispatchEvent(new Event('focus'));
+      input.dispatchEvent(new Event('blur'));
+    };
 
-      // Update submit button state
-      if (submitBtn) {
-        submitBtn.disabled = !validateRoute(originInput.value, destInput.value, false);
-      }
-    }, { once: true });
-  }
+    // Trigger events for both inputs
+    triggerEvents(originInput);
+    triggerEvents(destInput);
+    
+    // Manually update styles
+    updateInputStyle(originInput);
+    updateInputStyle(destInput);
+    
+    // Force placeholder update
+    updatePlaceholderVisibility(originInput);
+    updatePlaceholderVisibility(destInput);
+
+    saveRouteData(originInput.value, destInput.value, 'traveler');
+
+    // Update submit button state
+    if (submitBtn) {
+      submitBtn.disabled = !validateRoute(originInput.value, destInput.value, false);
+    }
+    
+    // Visual feedback
+    swapBtn.classList.add('swap-active');
+    setTimeout(() => {
+      swapBtn.classList.remove('swap-active');
+    }, 300);
+    
+    console.log('After swap:', {
+      origin: originInput.value,
+      destination: destInput.value
+    });
+  }, );
+}
 
   // Setup airport suggestions
   const airportSuggestions = page.querySelectorAll('.airport-suggestion');
@@ -243,7 +290,7 @@ export function initTravelerRouteSelection() {
           submitBtn.innerHTML = originalHTML;
         }, 800);
       }
-    }, { once: true });
+    }, );
   }
 
   // Setup back button
@@ -258,11 +305,12 @@ export function initTravelerRouteSelection() {
       } else {
         navigateToRoute('home');
       }
-    }, { once: true });
+    }, );
   }
 
   // Setup input validation and styling
-  setupInputHandlers(originInput, destInput, 'traveler', submitBtn);
+  ({ originInput, destInput } =
+  setupInputHandlers(originInput, destInput, 'traveler', submitBtn));
 
   // Load saved data
   loadSavedRouteData(originInput, destInput, 'traveler');
@@ -330,7 +378,7 @@ function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
     input.addEventListener('blur', () => {
       updateInputStyle(input);
     });
-
+ 
     // Add keyboard support
     input.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
@@ -344,9 +392,15 @@ function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
       }
     });
   });
+     return {
+    originInput: freshOriginInput,
+    destInput: freshDestInput
+  };
 }
 
 // Helper function to update input style
+
+
 function updateInputStyle(input) {
   const parent = input.closest('.group');
   if (!parent) return;
@@ -546,11 +600,11 @@ function initDragAndDrop(page, type) {
   addDragDropStyles();
   
   // Make input fields droppable
-  const originInput = type === 'cargo' 
+  let originInput = type === 'cargo' 
     ? page.querySelector('input[placeholder*="مبدأ"]') || page.querySelectorAll('input[type="text"]')[0]
     : page.querySelector('#origin-input');
     
-  const destInput = type === 'cargo'
+  let destInput = type === 'cargo'
     ? page.querySelector('input[placeholder*="مقصد"]') || page.querySelectorAll('input[type="text"]')[1]
     : page.querySelector('#dest-input');
   
@@ -567,6 +621,19 @@ function addDragDropStyles() {
   const style = document.createElement('style');
   style.id = 'drag-drop-styles';
   style.textContent = `
+    .swap-active {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+  }
+
+  .swap-button {
+    transition: all 0.3s ease;
+  }
+
+  .swap-button:hover {
+    background-color: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+    }
     .draggable {
       cursor: grab;
       user-select: none;
@@ -892,16 +959,21 @@ function makeDroppable(inputElement, field, type) {
   
   // Update placeholder visibility based on input value
   const updatePlaceholder = () => {
-    if (placeholder) {
-      if (inputElement.value.trim()) {
-        placeholder.style.opacity = '0';
-        placeholder.style.display = 'none';
-      } else {
-        placeholder.style.opacity = '0.6';
-        placeholder.style.display = 'flex';
-      }
+  if (placeholder) {
+    if (inputElement.value.trim()) {
+      placeholder.style.opacity = '0';
+      // Use timeout for smooth transition
+      setTimeout(() => {
+        if (inputElement.value.trim()) {
+          placeholder.style.display = 'none';
+        }
+      }, 300);
+    } else {
+      placeholder.style.display = 'flex';
+      placeholder.style.opacity = '0.6';
     }
-  };
+  }
+};
   
   // Initialize visibility
   updatePlaceholder();
@@ -942,7 +1014,21 @@ export function clearRouteData(type = 'cargo') {
   console.log(`${type} route data cleared`);
 }
 // ===================== HELPER FUNCTIONS =====================
-
+function updatePlaceholderVisibility(inputElement) {
+  const parent = inputElement.closest('.group');
+  if (!parent) return;
+  
+  const placeholder = parent.querySelector('.drop-placeholder');
+  if (!placeholder) return;
+  
+  if (inputElement.value.trim()) {
+    placeholder.style.opacity = '0';
+    placeholder.style.display = 'none';
+  } else {
+    placeholder.style.display = 'flex';
+    placeholder.style.opacity = '0.6';
+  }
+}
 // Helper function to handle suggestion clicks
 function handleSuggestionClick(item, originInput, destInput, type, submitBtn = null) {
   const title = item.querySelector('.text-sm.font-bold')?.textContent.trim();
