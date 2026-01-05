@@ -148,7 +148,7 @@ export function initTravelerRouteSelection() {
           submitBtn.disabled = !validateRoute(origin, destination, false);
         }
       }
-    });
+    },{once:true});
   });
 
   // Setup swap button
@@ -170,7 +170,7 @@ export function initTravelerRouteSelection() {
       if (submitBtn) {
         submitBtn.disabled = !validateRoute(originInput.value, destInput.value, false);
       }
-    });
+    },{once:true});
   }
 
   // FIXED: Setup airport suggestions with better selector
@@ -231,7 +231,7 @@ export function initTravelerRouteSelection() {
           submitBtn.innerHTML = originalHTML;
         }, 800);
       }
-    });
+    } ,{once:true} );
   }
 
   // Setup back button
@@ -246,7 +246,7 @@ export function initTravelerRouteSelection() {
       } else {
         navigateToRoute('home'); // یا نام مسیر قبلی
       }
-    });
+    }, {once:true});
   }
 
   // Setup input validation and styling
@@ -384,31 +384,45 @@ function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
 
 // Helper function for event delegation
 function setupEventDelegation(page) {
-  // Delegate clicks for popular routes
+  // Delegate clicks for popular routes - HANDLE DIRECTLY
   const popularRoutesContainer = page.querySelector('#popular-routes');
   if (popularRoutesContainer) {
     popularRoutesContainer.addEventListener('click', (e) => {
       const button = e.target.closest('.popular-route-btn');
       if (button) {
         e.preventDefault();
-        const event = new Event('click', { bubbles: true });
-        button.dispatchEvent(event);
+        e.stopPropagation();
+        
+        // Handle the click directly instead of re-dispatching
+        const origin = button.dataset.origin?.trim() || 
+                      button.querySelector('span:nth-child(1)')?.textContent.trim();
+        const destination = button.dataset.destination?.trim() || 
+                          button.querySelector('span:nth-child(3)')?.textContent.trim();
+        
+        if (origin && destination) {
+          const originInput = page.querySelector('#origin-input');
+          const destInput = page.querySelector('#dest-input');
+          const submitBtn = page.querySelector('#submit-route');
+          
+          if (originInput && destInput) {
+            originInput.value = origin;
+            destInput.value = destination;
+            
+            saveRouteData(origin, destination, 'traveler');
+            updateInputStyle(originInput);
+            updateInputStyle(destInput);
+            
+            if (submitBtn) {
+              submitBtn.disabled = !validateRoute(origin, destination, false);
+            }
+          }
+        }
       }
     });
   }
-
-  // Delegate clicks for suggestions
-  const suggestionsContainer = page.querySelector('.flex.flex-col.gap-2');
-  if (suggestionsContainer) {
-    suggestionsContainer.addEventListener('click', (e) => {
-      const suggestion = e.target.closest('.airport-suggestion');
-      if (suggestion) {
-        e.preventDefault();
-        const event = new Event('click', { bubbles: true });
-        suggestion.dispatchEvent(event);
-      }
-    });
-  }
+  
+  // Remove the suggestions delegation or fix it similarly
+  // ...
 }
 
 // Helper function to show input selector (when both inputs are filled)

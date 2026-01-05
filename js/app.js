@@ -17,7 +17,7 @@ async function loadPageInitializers() {
   console.log('📦 Loading page initializers...');
   
   const pages = [
-    { key: 'traveler-route', path: './pages/traveler-route.js', init: 'initTravelerRoute' },
+    { key: 'traveler-route', path: './components/route-selection.js', init: 'initTravelerRouteSelection'},
     { key: 'traveler-flight-date', path: './pages/traveler-flight-date.js', init: 'initTravelerFlightDate' },
     { key: 'my-order', path: './pages/my-order.js', init: 'initMyOrderPage' },
     { key: 'my-trips', path: './pages/my-trips.js', init: 'initMyTripsPage' },
