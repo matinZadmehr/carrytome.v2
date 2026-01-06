@@ -883,7 +883,7 @@
             </div>
           </div>
           <div class="w-full py-6 px-2">
-            <input class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700" max="30"
+            <input id="cargo-value-slider" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700" max="30"
               min="0" step="0.5" type="range" value="12.5" />
             <div class="flex justify-between text-xs text-slate-400 mt-2 font-medium px-1">
               <span>۰</span>
@@ -980,7 +980,7 @@
             </button>
             <div class="relative group">
               <div class="flex items-baseline justify-center gap-1.5 text-slate-900 dark:text-white">
-                <input
+                <input id="cargo-value-display"
                   class="w-32 bg-transparent text-center text-6xl font-extrabold tracking-tight border-none focus:ring-0 p-0 text-slate-900 dark:text-white"
                   inputmode="numeric" type="text" value="300" />
                 <span class="text-2xl font-bold tracking-tight text-slate-400 dark:text-slate-500">OMR</span>
@@ -1544,8 +1544,8 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/50">
-              <button id="view-flight"
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold"
+              <button data-flight-id="1"
+                class="view-flight  items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold"
                 data-route="flight-order">
                 مشاهده جزئیات
               </button>
@@ -1588,8 +1588,8 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800/50">
-              <button id="view-flight" data-route="flight-order"
-                class="flex items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold">
+              <button data-flight-id="2" data-route="flight-order"
+                class="view-flight  items-center justify-center rounded-xl h-10 px-4 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 transition-colors text-xs font-bold">
                 مشاهده جزئیات
               </button>
               <button data-flight-id="2"
@@ -3020,13 +3020,13 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-3 mt-1">
-              <button id="cargo-details"
-                class="flex h-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-sm font-bold transition-all hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95"
+              <button data-cargo-id="1"
+                class="view-cargo h-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-sm font-bold transition-all hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95"
                 data-route="cargo-order">
                 مشاهده جزئیات
               </button>
-              <button
-                class="flex h-10 items-center justify-center rounded-xl bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-all hover:bg-blue-600 active:scale-95">
+              <button data-cargo-id="1"
+                class="add-to-cargo-btn flex h-10 items-center justify-center rounded-xl bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-all hover:bg-blue-600 active:scale-95">
                 افزودن به سفارش
               </button>
             </div>
@@ -3093,8 +3093,8 @@
                 data-route="cargo-order">
                 مشاهده جزئیات
               </button>
-              <button
-                class="flex h-10 items-center justify-center rounded-xl bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-all hover:bg-blue-600 active:scale-95">
+              <button data-cargo-id="2"
+                class="add-to-cargo-btn flex h-10 items-center justify-center rounded-xl bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-all hover:bg-blue-600 active:scale-95">
                 افزودن به سفارش
               </button>
             </div>
@@ -3154,14 +3154,14 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-3 mt-1">
-              <button id="cargo-details"
+              <button data-cargo-id="2"
                 data-route="flight-order"
-                class="flex h-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-sm font-bold transition-all hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95"
+                class="view-cargo h-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-sm font-bold transition-all hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95"
                 data-route="cargo-order">
                 مشاهده جزئیات
               </button>
-              <button
-                class="flex h-10 items-center justify-center rounded-xl bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-all hover:bg-blue-600 active:scale-95">
+              <button data-cargo-id="2"
+                class="add-to-cargo-btn flex h-10 items-center justify-center rounded-xl bg-primary text-white text-sm font-bold shadow-md shadow-primary/20 transition-all hover:bg-blue-600 active:scale-95">
                 افزودن به سفارش
               </button>
             </div>

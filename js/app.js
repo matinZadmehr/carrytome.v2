@@ -3,12 +3,15 @@ console.log('🚀 App starting...');
 import { initRouter, initNavigation } from './router.js';
 import { initTheme } from './theme.js';
 import { hideAppLoader, forceRemoveLoader, checkLoaderStyles } from './utils/dom.js';
-import { initSliders } from './components/sliders.js';
+import { initCargoData } from './components/sliders.js';
 import { initializeOrdersStore } from './utils/order-store.js';
 import { initOrderSubmission } from './utils/order-submission.js';
 import { initFlightFiltering, setupFlightPage } from './components/flight-filter.js';
+import { initCargoOrderSubmission } from './utils/cargo-order-submission.js';
+
 setupFlightPage();
 
+//updateSliderFill();
 // Import page initializers with error handling
 const PAGE_INITIALIZERS = {};
 
@@ -114,7 +117,8 @@ async function initApp() {
 
     // Initialize sliders
     console.log('🎚️ Initializing sliders...');
-    initSliders();
+    initCargoData();
+
 
     // Hide loader with multiple fallbacks
     console.log('👁️ Hiding app loader...');
@@ -203,6 +207,10 @@ async function initApp() {
 // Enhanced DOM ready check
 console.log('📋 Initial script load, readyState:', document.readyState);
 
+document.addEventListener('DOMContentLoaded', () => {
+  // initialize cargo order buttons
+  initCargoOrderSubmission();
+});
 function startApp() {
   console.log('🎬 Starting app initialization...');
   

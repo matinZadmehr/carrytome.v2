@@ -1,4 +1,4 @@
-// utils/orders-store.js
+// utils/order-store.js
 import { getOrders, addOrder as addCartOrder } from '../components/cart.js';
 
 console.log('📦 orders-store.js loading...');
@@ -77,6 +77,43 @@ export function initializeOrdersStore() {
 export function getOrderById(orderId) {
   const orders = getOrders(); // Only from real storage
   return orders.find(order => order.id == orderId);
+}
+
+// --- Helper: Add cargo from page directly ---
+export function addCargoFromCard(cardElement) {
+  if (!cardElement) return;
+
+  try {
+    // Extract 'from' and 'to' from card spans
+    const locations = cardElement.querySelectorAll('div.flex.flex-col.items-center span.text-xl');
+    const from = locations[0]?.textContent || 'تهران (IKA)';
+    const to = locations[1]?.textContent || 'استانبول (IST)';
+
+    // Extract date (first date span in card)
+    const date = cardElement.querySelector('div.flex.items-center.gap-1.5 span.text-xs')?.textContent
+      || new Date().toISOString().split('T')[0];
+
+    // Extract item/flight/cargo name
+    const item = cardElement.querySelector('h2.text-xl')?.textContent
+      || cardElement.querySelector('div.relative.flex.flex-col.pt-1 span.text-base')?.textContent
+      || 'مرسوله';
+
+    const order = {
+      id: Date.now(),
+      type: 'cargo',
+      from,
+      to,
+      dateISO: new Date().toISOString().split('T')[0],
+      statusText: 'در انتظار تایید',
+      details: { item }
+    };
+
+    return addDynamicOrder(order);
+
+  } catch (err) {
+    console.error('❌ Failed to add cargo from card:', err);
+    throw err;
+  }
 }
 
 console.log('✅ orders-store.js loaded successfully');
