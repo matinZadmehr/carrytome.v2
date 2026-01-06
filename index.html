@@ -59,24 +59,53 @@
   </script>
 
   <style>
-    body {
-      height: 100vh;
-      max-height: 100vh;
-      overflow: hidden;
-      font-family: "Noto Sans Arabic", Vazirmatn, Manrope, sans-serif;
-    }
-
-    /* Add this to prevent any scrolling */
     html {
       height: 100%;
-      overflow: hidden;
     }
 
-    /* Ensure all pages are non-scrollable */
-    .page {
-      height: 100vh;
-      max-height: 100vh;
-      overflow: hidden;
+    body {
+      height: 100%;
+      font-family: "Noto Sans Arabic", Vazirmatn, Manrope, sans-serif;
+      overflow-x: hidden;
+    }
+    /* Fix for home page scrolling */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+body.home-page-active {
+    overflow: hidden !important;
+    position: fixed !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#page-home {
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+}
+
+#page-home main {
+    height: 100% !important;
+    overflow: hidden !important;
+}
+
+    /* فقط صفحه اصلی نباید اسکرول بشه */
+    /* بقیه صفحات می‌تونن اسکرول بشن */
+    .page:not(.page-home) {
+      min-height: 100vh;
+      overflow-y: auto;
+    }
+
+    /* برای تضمین اینکه صفحه اصلی واقعاً اسکرول نشه */
+    #page-home {
+      height: 100vh !important;
+      max-height: 100vh !important;
+      overflow: hidden !important;
     }
 
     /* Add to drag-drop-styles */
@@ -551,7 +580,7 @@
   </div>
 
   <section id="page-home" data-page="home"
-    class="page bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 h-screen flex flex-col overflow-hidden transition-colors duration-200">
+    class="page page-home bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 h-screen flex flex-col overflow-hidden transition-colors duration-200">
 
     <!-- No scrolling container -->
     <main class="flex-1 overflow-hidden p-4">
@@ -3675,6 +3704,19 @@
         <span class="text-[10px] font-medium">پروفایل</span>
       </a>
     </div>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    // اضافه کردن کلاس به body هنگام نمایش صفحه اصلی
+    document.body.classList.add('home-page-active');
+    
+    // حذف کلاس هنگام تغییر صفحه
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('[data-route]') && !e.target.closest('#page-home')) {
+            document.body.classList.remove('home-page-active');
+        }
+    });
+});
+</script>
 </body>
 </section>
 
