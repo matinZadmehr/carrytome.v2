@@ -529,121 +529,155 @@
       <div class="app-loader__spinner"></div>
     </div>
   </div>
+
   <section id="page-home" data-page="home"
-    class="page bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col overflow-x-hidden transition-colors duration-200">
+    class="page bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 h-screen flex flex-col overflow-hidden transition-colors duration-200">
 
-    <!-- HEADER -->
-    <main class="flex-grow w-full max-w-md mx-auto pb-24">
+    <!-- No scrolling container -->
+    <main class="flex-1 overflow-hidden p-4">
+      <div class="h-full flex flex-col gap-4">
 
-      <!-- HERO -->
-      <section class="p-4 pt-6">
-        <div
-          class="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#0a2e5c] to-[#0f6df0] text-white shadow-lg">
-          <div class="absolute -top-12 -left-12 w-48 h-48 bg-white/10 rounded-full blur-2xl"></div>
-          <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-accent/20 rounded-full blur-2xl"></div>
+        <!-- HERO - 15% of screen -->
+        <div class="h-[15%] min-h-[100px]">
+          <div
+            class="relative overflow-hidden rounded-xl bg-gradient-to-br from-[#0a2e5c] to-[#0f6df0] text-white shadow-lg h-full">
+            <div class="absolute -top-8 -left-8 w-32 h-32 bg-white/10 rounded-full blur-xl"></div>
+            <div class="absolute -bottom-8 -right-8 w-28 h-28 bg-accent/20 rounded-full blur-xl"></div>
 
-          <div class="relative z-10 p-6 flex flex-col items-center text-center gap-6">
-            <div
-              class="flex items-center justify-center w-40 h-40 rounded-full bg-white/10 backdrop-blur-sm overflow-hidden">
-              <img src="https://raw.githubusercontent.com/matinZadmehr/carrytome2/main/asset/images/logo.jpg"
-                alt="Carry to Me Logo" class="w-full h-full object-cover" />
-            </div>
-
-            <div class="space-y-2">
-
-              <h2 class="text-2xl font-black">تو می سپاری، او می رساند</h2>
-
-            </div>
-          </div>
-        </div>
-      </section>
-      <!-- سپردن کالا -->
-      <section class="px-4 pb-4">
-        <div class="group relative overflow-hidden rounded-xl
-               bg-gradient-to-br from-[#8C1D18] to-[#C0392B]
-               shadow-[0_6px_20px_rgba(140,29,24,0.35)]
-               border border-red-900/30
-               transition-all hover:shadow-xl">
-
-          <div class="flex flex-row items-stretch">
-            <div class="w-32 relative overflow-hidden">
+            <div class="relative z-10 p-3 flex flex-row items-center justify-center h-full gap-4">
               <div
-                class="absolute inset-0 bg-cover bg-center opacity-90 transition-transform duration-500 group-hover:scale-110"
-                style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDKpvpbEBhwaGHhEWf0p9aiJ79olgxzGefUxvnhESgYfLbs5O1nHyPhQ36avip5Fp2jy4K9G6wQJ4J9d7H3FUzHy6lcKVFt4UGmslxOz1DCuzWltZG7j-nH9Of7lH56Bt1cKetbhQZQswHOhxRW6GQ5j9IWJOZ9ab-fjtkPUhURI-iRco8pGvQIQ_2SiQWwUS4vbpmwlI00YfKYsC_mqMwQePgYIRaOS0XiWgAPZtfwVhYrKG51fkH4qaFKNIXDC-RtVYwgoZee1JbN');">
-              </div>
-              <div class="absolute inset-0 bg-black/20"></div>
-            </div>
-
-            <div class="flex-1 p-4 flex flex-col justify-center">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="p-1.5 rounded-full bg-white/20 text-white">
-                  <span class="material-symbols-outlined text-[20px]">mark_email_unread</span>
-                </span>
-                <span class="text-xs font-bold tracking-wider text-white/90">سپارا</span>
+                class="flex items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-full bg-white/10 backdrop-blur-sm overflow-hidden border-2 border-white/30">
+                <img src="https://raw.githubusercontent.com/matinZadmehr/carrytome2/main/asset/images/logo.jpg"
+                  alt="Carry to Me Logo" class="w-full h-full object-cover" />
               </div>
 
-              <h4 class="text-lg font-bold text-white mb-1">سپردن کالا</h4>
-              <p class="text-white/80 text-sm mb-4">
-                مرسوله‌ی خود را در دستانی مطمئن به امانت بگذارید
-              </p>
-
-              <button class="w-full py-2.5 bg-white text-[#8C1D18] rounded-full text-sm font-bold
-                     hover:bg-white/90 transition-all active:scale-95" data-route="cargo-cat" type="button">
-                ثبت مرسوله
-              </button>
+              <div>
+                <h2 class="text-lg md:text-xl font-black text-white">تو می‌سپاری،<br>او می‌رساند</h2>
+              </div>
             </div>
           </div>
         </div>
-      </section>
 
-      <!-- کسب درآمد از سفر -->
-      <section class="px-4 pb-4">
-        <div class="group relative overflow-hidden rounded-xl
-               bg-gradient-to-br from-[#0F766E] to-[#22C55E]
-               shadow-[0_6px_20px_rgba(34,197,94,0.35)]
-               border border-emerald-700/30
-               transition-all hover:shadow-xl">
+        <!-- CARDS - Each 40% of remaining space -->
+        <div class="flex-1 overflow-hidden">
+          <div class="h-full flex flex-col gap-4">
 
-          <div class="flex flex-row items-stretch">
-            <div class="w-32 relative overflow-hidden">
-              <div
-                class="absolute inset-0 bg-cover bg-center opacity-90 transition-transform duration-500 group-hover:scale-110"
-                style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8u1rXDeFG7xlpdFuAN1ssVonBjoFTGxCRdbLe8ihywMLFpOxcjw7_Rsog89IIohWvWVU0WiTbuKmlHfqzRNB1NR6OAWNnpI74wQ1Hv5-d9q6Pq0tT7oFHZw5NulrKDG4_cCeKGBmGemOsaMc-Gl8fCxtyLHUX_VPjByFysfFWv7VpkVz40m-4jBTD6mI2p1rZXitaSr6SvORhJ1nkEK7wg_4ICFJteJsAk8Ot-684JEnQmwcD4heLL0bF1wrmxStLm4uO6E_qi93M');">
+            <!-- سپردن کالا Card - 40% height -->
+            <div class="h-[40%] min-h-0">
+              <div class="group relative overflow-hidden rounded-2xl
+                   bg-gradient-to-br from-[#8C1D18] to-[#C0392B]
+                   shadow-[0_8px_24px_rgba(140,29,24,0.4)]
+                   border-2 border-red-900/40
+                   transition-all hover:shadow-xl hover:scale-[1.01] h-full">
+
+                <div class="flex flex-row items-stretch h-full">
+                  <!-- Image side - 40% width -->
+                  <div class="w-[40%] max-w-[140px] relative overflow-hidden flex-shrink-0">
+                    <div
+                      class="absolute inset-0 bg-cover bg-center opacity-95 transition-transform duration-500 group-hover:scale-110"
+                      style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuDKpvpbEBhwaGHhEWf0p9aiJ79olgxzGefUxvnhESgYfLbs5O1nHyPhQ36avip5Fp2jy4K9G6wQJ4J9d7H3FUzHy6lcKVFt4UGmslxOz1DCuzWltZG7j-nH9Of7lH56Bt1cKetbhQZQswHOhxRW6GQ5j9IWJOZ9ab-fjtkPUhURI-iRco8pGvQIQ_2SiQWwUS4vbpmwlI00YfKYsC_mqMwQePgYIRaOS0XiWgAPZtfwVhYrKG51fkH4qaFKNIXDC-RtVYwgoZee1JbN');">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-lg">
+                      <span class="text-white text-xs font-bold">ارسال امن</span>
+                    </div>
+                  </div>
+
+                  <!-- Content side - 60% width -->
+                  <div class="flex-1 p-4 flex flex-col justify-between">
+                    <div>
+                      <!-- Badge -->
+                      <div class="flex items-center gap-2 mb-3">
+                        <span class="p-1.5 rounded-full bg-white/30 text-white shadow-sm">
+                          <span class="material-symbols-outlined text-[20px]">mark_email_unread</span>
+                        </span>
+                        <span class="text-sm font-bold tracking-wider text-white">سپارا</span>
+                      </div>
+
+                      <!-- Title -->
+                      <h4 class="text-xl font-bold text-white mb-2 leading-tight">سپردن کالا</h4>
+
+                      <!-- Description -->
+                      <p class="text-white/90 text-sm leading-relaxed mb-4 line-clamp-2">
+                        مرسوله‌ی خود را در دستانی مطمئن به امانت بگذارید و با خیال راحت تحویل بگیرید
+                      </p>
+                    </div>
+
+                    <!-- Button -->
+                    <button class="w-full py-3 bg-white text-[#8C1D18] rounded-full text-base font-bold
+                         hover:bg-white/95 transition-all active:scale-95 shadow-lg" data-route="cargo-cat"
+                      type="button">
+                      ثبت مرسوله
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div class="absolute inset-0 bg-black/20"></div>
             </div>
 
-            <div class="flex-1 p-4 flex flex-col justify-center">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="p-1.5 rounded-full bg-white/20 text-white">
-                  <span class="material-symbols-outlined text-[20px]">savings</span>
-                </span>
-                <span class="text-xs font-bold tracking-wider text-white/90">رسانا</span>
+            <!-- کسب درآمد از سفر Card - 40% height -->
+            <div class="h-[40%] min-h-0">
+              <div class="group relative overflow-hidden rounded-2xl
+                   bg-gradient-to-br from-[#0F766E] to-[#22C55E]
+                   shadow-[0_8px_24px_rgba(34,197,94,0.4)]
+                   border-2 border-emerald-700/40
+                   transition-all hover:shadow-xl hover:scale-[1.01] h-full">
+
+                <div class="flex flex-row items-stretch h-full">
+                  <!-- Image side - 40% width -->
+                  <div class="w-[40%] max-w-[140px] relative overflow-hidden flex-shrink-0">
+                    <div
+                      class="absolute inset-0 bg-cover bg-center opacity-95 transition-transform duration-500 group-hover:scale-110"
+                      style="background-image:url('https://lh3.googleusercontent.com/aida-public/AB6AXuA8u1rXDeFG7xlpdFuAN1ssVonBjoFTGxCRdbLe8ihywMLFpOxcjw7_Rsog89IIohWvWVU0WiTbuKmlHfqzRNB1NR6OAWNnpI74wQ1Hv5-d9q6Pq0tT7oFHZw5NulrKDG4_cCeKGBmGemOsaMc-Gl8fCxtyLHUX_VPjByFysfFWv7VpkVz40m-4jBTD6mI2p1rZXitaSr6SvORhJ1nkEK7wg_4ICFJteJsAk8Ot-684JEnQmwcD4heLL0bF1wrmxStLm4uO6E_qi93M');">
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-lg">
+                      <span class="text-white text-xs font-bold">کسب درآمد</span>
+                    </div>
+                  </div>
+
+                  <!-- Content side - 60% width -->
+                  <div class="flex-1 p-4 flex flex-col justify-between">
+                    <div>
+                      <!-- Badge -->
+                      <div class="flex items-center gap-2 mb-3">
+                        <span class="p-1.5 rounded-full bg-white/30 text-white shadow-sm">
+                          <span class="material-symbols-outlined text-[20px]">savings</span>
+                        </span>
+                        <span class="text-sm font-bold tracking-wider text-white">رسانا</span>
+                      </div>
+
+                      <!-- Title -->
+                      <h4 class="text-xl font-bold text-white mb-2 leading-tight">کسب درآمد از سفر</h4>
+
+                      <!-- Description -->
+                      <p class="text-white/90 text-sm leading-relaxed mb-4 line-clamp-2">
+                        بخشی از هزینه سفر خود را با حمل بار جبران کنید و سفرتان را به درآمد تبدیل کنید
+                      </p>
+                    </div>
+
+                    <!-- Button -->
+                    <button class="w-full py-3 bg-white text-[#0F766E] rounded-full text-base font-bold
+                         hover:bg-white/95 transition-all active:scale-95 shadow-lg" data-route="traveler-route"
+                      type="button">
+                      ثبت سفر
+                    </button>
+                  </div>
+                </div>
               </div>
-
-              <h4 class="text-lg font-bold text-white mb-1">کسب درآمد از سفر</h4>
-              <p class="text-white/80 text-sm mb-4">
-                بخشی از هزینه سفر خود را با حمل بار جبران کنید
-              </p>
-
-              <button class="w-full py-2.5 bg-white text-[#0F766E] rounded-full text-sm font-bold
-                     hover:bg-white/90 transition-all active:scale-95" data-route="traveler-route" type="button">
-                ثبت سفر
-              </button>
             </div>
+
           </div>
         </div>
-      </section>
 
+      </div>
     </main>
   </section>
-
 
   <section id="page-cargo-cat" data-page="cargo-cat"
     class="page hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased selection:bg-primary/30 selection:text-primary"
     aria-hidden="true">
     <div
-      class="relative flex h-screen w-full max-w-md mx-auto flex-col bg-background-light dark:bg-background-dark overflow-hidden group/design-root shadow-2xl border-x border-slate-200/50 dark:border-slate-800/50">
+      class="relative flex flex-col w-full max-w-md mx-auto min-h-screen bg-background-light dark:bg-background-dark group/design-root shadow-2xl border-x border-slate-200/50 dark:border-slate-800/50">
 
       <!-- HEADER -->
       <header
@@ -676,7 +710,7 @@
       </div>
 
       <!-- MAIN SCROLLABLE CONTENT -->
-      <main class="flex-1 overflow-y-auto overflow-x-hidden no-scrollbar px-5 pb-48">
+      <main class="flex-1 overflow-x-hidden px-5 pb-12">
         <div class="py-4 flex flex-col gap-4">
           <!-- INTRO -->
           <div class="flex items-start gap-3">
@@ -883,7 +917,8 @@
             </div>
           </div>
           <div class="w-full py-6 px-2">
-            <input id="cargo-value-slider" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700" max="30"
+            <input id="cargo-value-slider"
+              class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer dark:bg-slate-700" max="30"
               min="0" step="0.5" type="range" value="12.5" />
             <div class="flex justify-between text-xs text-slate-400 mt-2 font-medium px-1">
               <span>۰</span>
@@ -1550,9 +1585,9 @@
                 مشاهده جزئیات
               </button>
               <button data-flight-id="1"
-  class="add-to-trip-btn flex items-center justify-center rounded-xl h-10 px-4 bg-primary hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all text-xs font-bold">
-  افزودن به سفارش‌ها
-</button>
+                class="add-to-trip-btn flex items-center justify-center rounded-xl h-10 px-4 bg-primary hover:bg-blue-600 text-white shadow-lg shadow-blue-500/20 active:scale-[0.98] transition-all text-xs font-bold">
+                افزودن به سفارش‌ها
+              </button>
             </div>
           </div>
           <!-- Flight Card 3 -->
@@ -2922,7 +2957,7 @@
           data-route="registered-cargo" type="button">
           رد کردن
         </button>
-        <button 
+        <button
           class="add-to-trip-btn w-full py-3.5 px-4 rounded-xl bg-primary hover:bg-blue-600 text-white font-bold shadow-lg shadow-blue-500/30 transition-all active:scale-[0.98]"
           type="button">
           افزودن به سفارش ها
@@ -3154,8 +3189,7 @@
               </div>
             </div>
             <div class="grid grid-cols-2 gap-3 mt-1">
-              <button data-cargo-id="2"
-                data-route="flight-order"
+              <button data-cargo-id="2" data-route="flight-order"
                 class="view-cargo h-10 items-center justify-center rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-sm font-bold transition-all hover:bg-slate-50 dark:hover:bg-slate-800 active:scale-95"
                 data-route="cargo-order">
                 مشاهده جزئیات
@@ -3547,6 +3581,7 @@
     </main>
 
   </section>
+
   <section id="bottom-nav"
     class="fixed bottom-0 left-0 right-0 z-50 bg-surface-light dark:bg-surface-dark border-t border-slate-200 dark:border-slate-800 pb-safe pt-2 px-6 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]"
     data-visible-gges="home,profile,message-hub,my-order">
