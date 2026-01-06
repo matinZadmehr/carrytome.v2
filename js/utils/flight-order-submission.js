@@ -1,5 +1,5 @@
 // flight-order-submission.js
-import { addOrder } from '../components/cart.js';
+//import { addOrder } from '../components/cart.js';
 import { showNotification } from './notifications.js';
 import { addDynamicOrder } from './order-store.js';
 
@@ -20,7 +20,7 @@ export function initFlightOrderSubmission() {
     console.log('🖱️ Flight add button clicked', flightId);
 
     // Get the parent element of the button (assumes siblings have h3, p, reward span)
-    const flightEl = btn.parentElement;
+    const flightEl = btn.closest('.group'); // instead of btn.parentElement
 
     const flight = {
       id: flightId,
@@ -57,5 +57,23 @@ export function initFlightOrderSubmission() {
       details: { reward: flight.reward, description: flight.route }
     };
 
+    // Add to cart
+    try {
+      if (typeof addOrder !== 'undefined') addOrder(orderObj);
+      if (typeof addDynamicOrder !== 'undefined') addDynamicOrder(orderObj);
+
+      if (typeof showNotification !== 'undefined') {
+        showNotification(`سفر ${flight.from} → ${flight.to} به سفرهای من اضافه شد`, 'success');
+      }
+
+      console.log('✅ Flight order added', orderObj);
+    } catch (err) {
+      console.error('❌ Failed to add flight order', err);
+      // Revert button state on error
+      btn.disabled = false;
+      btn.classList.remove('bg-emerald-500', 'hover:bg-emerald-600', 'text-white');
+      btn.classList.add('bg-primary', 'hover:bg-blue-600');
+      btn.innerHTML = 'افزودن به سفارش‌ها';
+    }
   });
 }
