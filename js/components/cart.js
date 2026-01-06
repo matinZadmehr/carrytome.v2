@@ -24,6 +24,7 @@ function saveOrders(orders) {
 }
 
 /* Add new order */
+
 export function addOrder(order) {
   const orders = getOrders();
   
@@ -56,6 +57,7 @@ export function addOrder(order) {
     return null;
   }
 }
+
 
 /* Remove order by ID */
 export function removeOrder(orderId) {

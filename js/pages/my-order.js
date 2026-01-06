@@ -1,7 +1,9 @@
 import { delegateEvent, createElement } from '../utils/dom.js';
 import { showOrderDetailsModal } from './modals.js';
 import { getDynamicOrders } from '../utils/order-store.js';
+import { initFlightOrderSubmission } from '../utils/flight-order-submission.js';
 
+initFlightOrderSubmission();
 /* =====================
    STATE
 ===================== */
