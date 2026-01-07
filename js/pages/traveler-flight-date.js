@@ -1,4 +1,5 @@
 // pages/traveler-flight-date.js
+import { addTravelerListing } from '../utils/traveler-listings.js';
 
 export function initTravelerFlightDate() {
     const page = document.querySelector(
@@ -128,6 +129,29 @@ export function initTravelerFlightDate() {
         };
         console.log('Selected flight datetime:', result);
         window.flightDate = result;
+
+        try {
+            sessionStorage.setItem('travelerFlightDate', JSON.stringify(result));
+        } catch {
+            // ignore storage errors
+        }
+
+        // Save a traveler listing so cargo senders can see it on `registered-cargo`
+        let travelerRoute = null;
+        try {
+            travelerRoute = JSON.parse(sessionStorage.getItem('currentTravelerRoute') || localStorage.getItem('travelerRoute') || 'null');
+        } catch {
+            travelerRoute = null;
+        }
+
+        if (travelerRoute?.origin && travelerRoute?.destination) {
+            addTravelerListing({
+                origin: travelerRoute.origin,
+                destination: travelerRoute.destination,
+                dateISO: result.iso,
+                time: `${pad(result.hour)}:${pad(result.minute)}`,
+            });
+        }
     });
 
     /* ======================

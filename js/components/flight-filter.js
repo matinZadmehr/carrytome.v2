@@ -198,7 +198,7 @@ export function initFlightFiltering() {
       message.className = 'text-center py-8 text-slate-500 dark:text-slate-400';
       message.innerHTML = `
         <span class="material-symbols-outlined text-4xl mb-4">flight_takeoff</span>
-        <p>در حال حاضر هیچ پروازی ثبت نشده است.</p>
+        <p>در حال حاضر هیچ بسته ای برای ارسال ثبت نشده است.</p>
       `;
       cardsContainer.appendChild(message);
     }

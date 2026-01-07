@@ -1,5 +1,21 @@
 // flight-order.js
 import { loadTrips } from '../utils/storage.js';
+import { getOrders } from '../components/cart.js';
+
+function extractAirportCode(text) {
+    if (typeof text !== 'string') return '';
+    const paren = text.match(/\(([A-Z]{3})\)/);
+    if (paren) return paren[1];
+    const any = text.match(/\b[A-Z]{3}\b/);
+    return any ? any[0] : '';
+}
+
+function parseNumber(value) {
+    if (typeof value === 'number') return value;
+    if (typeof value !== 'string') return 0;
+    const match = value.replace(/,/g, '').match(/[\d.]+/);
+    return match ? Number(match[0]) || 0 : 0;
+}
 
 /**
  * Initialize the flight order page to populate data when requested
@@ -15,7 +31,31 @@ export function initFlightOrderPage() {
 
         // Load all trips from localStorage
         const trips = loadTrips();
-        const flight = trips.find(f => f.id == flightId);
+        let flight = trips.find(f => f.id == flightId || f.submittedId == flightId);
+
+        // Fallback: if this id refers to an order request, render from cart orders
+        if (!flight) {
+            const orders = getOrders();
+            const order = orders.find(o => o.id == flightId);
+            if (order) {
+                const fromCode = extractAirportCode(order.from) || order.from;
+                const toCode = extractAirportCode(order.to) || order.to;
+                const weight = parseNumber(order.details?.weight || '');
+                const rewardValue = parseNumber(order.details?.value || order.details?.price || '');
+                flight = {
+                    id: order.id,
+                    image: 'asset/images/logo.jpg',
+                    fromCode,
+                    toCode,
+                    date: order.date || order.details?.date || '',
+                    cargoIcon: 'inventory_2',
+                    cargo: order.details?.item || order.item || order.description || 'مرسوله',
+                    weight: weight || 0,
+                    rewardValue: rewardValue || 0,
+                };
+            }
+        }
+
         if (!flight) return;
 
         populateFlightOrder(page, flight);
@@ -40,11 +80,19 @@ function populateFlightOrder(page, flight) {
     const routeElems = page.querySelectorAll('div.relative.flex.flex-col.pt-1');
     if (routeElems.length >= 2) {
         // origin
-        routeElems[0].querySelector('span.text-base')?.textContent = `${flight.fromCode} (${flight.fromCode})`;
-        routeElems[0].querySelector('span.text-sm')?.textContent = `${flight.date} - ساعت ${flight.timeFrom || '10:30'}`;
+        {
+            const originBase = routeElems[0].querySelector('span.text-base');
+            if (originBase) originBase.textContent = `${flight.fromCode} (${flight.fromCode})`;
+            const originTime = routeElems[0].querySelector('span.text-sm');
+            if (originTime) originTime.textContent = `${flight.date} - ساعت ${flight.timeFrom || '10:30'}`;
+        }
         // destination
-        routeElems[1].querySelector('span.text-base')?.textContent = `${flight.toCode} (${flight.toCode})`;
-        routeElems[1].querySelector('span.text-sm')?.textContent = `${flight.date} - ساعت ${flight.timeTo || '14:15'}`;
+        {
+            const destBase = routeElems[1].querySelector('span.text-base');
+            if (destBase) destBase.textContent = `${flight.toCode} (${flight.toCode})`;
+            const destTime = routeElems[1].querySelector('span.text-sm');
+            if (destTime) destTime.textContent = `${flight.date} - ساعت ${flight.timeTo || '14:15'}`;
+        }
     }
 
     // Cargo & weight

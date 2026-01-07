@@ -28,6 +28,7 @@ async function loadPageInitializers() {
     { key: 'traveler-flight-date', path: './pages/traveler-flight-date.js', init: 'initTravelerFlightDate' },
     { key: 'my-order', path: './pages/my-order.js', init: 'initMyOrderPage' },
     { key: 'cargo-cat', path: './pages/cargo-categories.js', init: 'initCargoCategories' },
+    { key: 'registered-cargo', path: './pages/registered-cargo.js', init: 'initRegisteredCargoPage' },
     { key: 'registered-flight', path: './pages/registered-flight.js', init: 'initRegisteredFlightFilters'}
   ];
 
