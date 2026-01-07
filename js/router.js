@@ -51,11 +51,12 @@ export function initRouter(pageInitializers = {}) {
     }
   };
 
+  
   const showRoute = (route) => {
     const activeRoute = normalizeRoute(route);
     const routeChanged = activeRoute !== currentRoute;
     currentRoute = activeRoute;
-
+    document.body.classList.toggle('home-page-active', activeRoute === 'home');
     if (routeChanged && !isFirstRender) tickProgress();
 
     // Hide all pages, show active page
@@ -68,6 +69,7 @@ export function initRouter(pageInitializers = {}) {
         pageEl.classList.remove("page-enter");
         continue;
       }
+
 
       const wasHidden = pageEl.classList.contains("hidden");
       pageEl.classList.remove("hidden");
