@@ -15,7 +15,7 @@ export function initTravelerGreet() {
 
   startButton.addEventListener('click', (e) => {
     e.preventDefault();
-    navigateTo('flight-kyc');
+    navigateTo('kyc');
   });
 }
 
@@ -86,8 +86,8 @@ export function initKycPage() {
   const progressBar = page.querySelector('#kyc-progress-bar');
 
   const requiredDocs = [
-    { id: 'id-card', kind: 'kyc-id-card', label: 'ID Card / Passport' },
-    { id: 'selfie', kind: 'kyc-selfie', label: 'Selfie' },
+    { id: 'id-card', kind: 'kyc-id-card', label: 'Passport/ID', accept: 'image/*,.pdf' },
+    { id: 'selfie', kind: 'kyc-selfie', label: 'Selfie', accept: 'image/*' },
   ];
 
   const filesByDocId = new Map();
@@ -115,6 +115,10 @@ export function initKycPage() {
     card.classList.add('border-emerald-200');
     card.classList.remove('border-slate-100', 'border-orange-200');
 
+    const status = card.querySelector('[data-kyc-status]');
+    const file = filesByDocId.get(docId);
+    if (status) status.textContent = file ? `انتخاب شد: ${file.name}` : 'انتخاب شد';
+
     const iconWrap = card.querySelector('[data-kyc-icon]');
     if (iconWrap) {
       iconWrap.classList.remove('bg-slate-50', 'bg-orange-50', 'text-slate-400', 'text-orange-600');
@@ -131,7 +135,8 @@ export function initKycPage() {
     card.addEventListener('click', () => {
       const input = document.createElement('input');
       input.type = 'file';
-      input.accept = 'image/*,.pdf';
+      input.accept = doc.accept;
+      if (doc.id === 'selfie') input.capture = 'user';
       input.onchange = () => {
         const file = input.files?.[0];
         if (!file) return;

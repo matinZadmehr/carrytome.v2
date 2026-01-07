@@ -3699,10 +3699,12 @@
       <div class="flex flex-col gap-2 px-6 py-6">
         <div class="flex items-end justify-between mb-1">
           <span class="text-sm font-bold text-slate-700 dark:text-slate-300">پیشرفت تأیید</span>
-          <span id="kyc-progress-text" class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">۰ از ۲ مدرک</span>
+          <span id="kyc-progress-text" class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">۰
+            از ۲ مدرک</span>
         </div>
         <div class="relative h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
-          <div id="kyc-progress-bar" class="absolute top-0 right-0 h-full rounded-full bg-primary transition-all duration-500 ease-out"
+          <div id="kyc-progress-bar"
+            class="absolute top-0 right-0 h-full rounded-full bg-primary transition-all duration-500 ease-out"
             style="width: 5%;"></div>
         </div>
       </div>
@@ -3719,6 +3721,7 @@
             <div class="flex flex-col">
               <p class="text-base font-bold text-slate-900 dark:text-white">کارت ملی یا پاسپورت</p>
               <p class="text-xs text-slate-500 dark:text-slate-400">ارائه یکی از این مدارک کافی است</p>
+              <p data-kyc-status class="text-xs text-slate-400 dark:text-slate-500 mt-1">هنوز انتخاب نشده</p>
             </div>
           </div>
           <div data-kyc-icon
@@ -3731,15 +3734,13 @@
           <div class="flex items-center gap-4">
             <div class="flex flex-col">
               <p class="text-base font-bold text-slate-900 dark:text-white">عکس سلفی</p>
-              <p class="text-xs text-orange-500 font-medium flex items-center gap-1">
-                <span class="material-symbols-outlined text-[14px] icon-filled">error</span>
-                نیاز به اصلاح: نور کم
-              </p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">یک عکس واضح از چهره خود بگیرید</p>
+              <p data-kyc-status class="text-xs text-slate-400 dark:text-slate-500 mt-1">هنوز انتخاب نشده</p>
             </div>
           </div>
           <div data-kyc-icon
-            class="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-50 dark:bg-orange-900/20 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-all">
-            <span class="material-symbols-outlined">refresh</span>
+            class="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-50 dark:bg-orange-900/20 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-all border border-orange-200 dark:border-orange-900/50">
+            <span class="material-symbols-outlined">camera_alt</span>
           </div>
         </div>
       </div>
@@ -3749,20 +3750,21 @@
           اطلاعات شما با پروتکل SSL 256-bit محافظت می‌شود
         </p>
       </div>
-    </div>
-    <div
-      class="fixed bottom-0 left-0 right-0 z-40 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 py-4 pb-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
-      <button
-        class="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 py-3.5 text-base font-bold cursor-not-allowed transition-all"
-        disabled="">
-        <span>ارسال برای بررسی</span>
-        <span class="material-symbols-outlined text-lg opacity-70">send</span>
-      </button>
-      <div class="mt-3 text-center">
-        <a class="text-xs font-medium text-primary hover:text-blue-600 transition-colors" href="#">قوانین حریم خصوصی و
-          شرایط استفاده</a>
+      <div
+        class="fixed bottom-0 left-0 right-0 z-40 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 py-4 pb-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <button id="kyc-submit" type="button"
+          class="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 py-3.5 text-base font-bold cursor-not-allowed transition-all"
+          disabled="">
+          <span>ارسال برای بررسی</span>
+          <span class="material-symbols-outlined text-lg opacity-70">send</span>
+        </button>
+        <div class="mt-3 text-center">
+          <a class="text-xs font-medium text-primary hover:text-blue-600 transition-colors" href="#">قوانین حریم خصوصی و
+            شرایط استفاده</a>
+        </div>
       </div>
     </div>
+
     <div class="hidden relative mx-4 mt-4 rounded-2xl bg-primary/5 border border-primary/20 p-4">
       <div class="flex items-start gap-3">
         <span class="material-symbols-outlined text-primary mt-0.5">info</span>
@@ -3873,7 +3875,7 @@
           قبول نام رایگان است و کمتر از ۲ دقیقه زمان می‌برد
         </p>
       </main>
-      </div>
+    </div>
     </div>
   </section>
   <section id="page-flight-kyc" data-page="flight-kyc" aria-hidden="true"
@@ -3975,8 +3977,10 @@
           <div class="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-bl-full -mr-4 -mt-4"></div>
           <div class="flex items-center justify-between mb-6 relative z-10">
             <div class="flex flex-col items-center gap-1">
-              <span id="order-review-origin-code" class="text-3xl font-black text-slate-800 dark:text-white font-display tracking-tight">IKA</span>
-              <span id="order-review-origin-city" class="text-xs font-medium text-slate-500 dark:text-slate-400">تهران</span>
+              <span id="order-review-origin-code"
+                class="text-3xl font-black text-slate-800 dark:text-white font-display tracking-tight">IKA</span>
+              <span id="order-review-origin-city"
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">تهران</span>
             </div>
             <div class="flex-1 flex flex-col items-center px-4 relative">
               <span class="material-symbols-outlined text-primary text-[24px] rotate-180 mb-1">flight</span>
@@ -3985,8 +3989,10 @@
                 class="text-[10px] font-bold text-primary bg-blue-50 dark:bg-blue-900/30 px-2 py-0.5 rounded-full mt-2">مستقیم</span>
             </div>
             <div class="flex flex-col items-center gap-1">
-              <span id="order-review-destination-code" class="text-3xl font-black text-slate-800 dark:text-white font-display tracking-tight">MCT</span>
-              <span id="order-review-destination-city" class="text-xs font-medium text-slate-500 dark:text-slate-400">مسقط</span>
+              <span id="order-review-destination-code"
+                class="text-3xl font-black text-slate-800 dark:text-white font-display tracking-tight">MCT</span>
+              <span id="order-review-destination-city"
+                class="text-xs font-medium text-slate-500 dark:text-slate-400">مسقط</span>
             </div>
           </div>
           <div class="grid grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-700/50 pt-4">
@@ -4015,7 +4021,8 @@
             </div>
             <div>
               <p class="text-xs text-slate-500 dark:text-slate-400">ظرفیت بار خالی</p>
-              <p id="order-review-baggage" class="text-lg font-black text-slate-800 dark:text-white mt-0.5">۱۰ کیلوگرم</p>
+              <p id="order-review-baggage" class="text-lg font-black text-slate-800 dark:text-white mt-0.5">۱۰ کیلوگرم
+              </p>
             </div>
           </div>
           <div
@@ -4026,7 +4033,8 @@
             </div>
             <div>
               <p class="text-xs text-slate-500 dark:text-slate-400">شماره پرواز</p>
-              <p id="order-review-flight-number" class="text-lg font-black text-slate-800 dark:text-white mt-0.5 font-display">W5-115</p>
+              <p id="order-review-flight-number"
+                class="text-lg font-black text-slate-800 dark:text-white mt-0.5 font-display">W5-115</p>
             </div>
           </div>
         </div>
