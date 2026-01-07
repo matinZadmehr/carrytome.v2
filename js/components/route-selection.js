@@ -10,9 +10,6 @@ export function initRouteSelection() {
 
   console.log('Initializing enhanced cargo route selection...');
   
-  // Initialize drag and drop
-  initDragAndDrop(page, 'cargo');
-
   // Get DOM elements
   let originInput = page.querySelector('input[placeholder*="مبدأ"]') ||
     page.querySelectorAll('input[type="text"]')[0];
@@ -23,6 +20,17 @@ export function initRouteSelection() {
     console.error('Could not find origin/destination inputs');
     return;
   }
+
+  // Setup input validation and styling (and de-duplicate listeners)
+  ({ originInput, destInput } = setupInputHandlers(originInput, destInput, 'cargo'));
+
+  // Track which field user selected last (clicking a suggestion can blur inputs)
+  let lastFocusedField = null;
+  originInput.addEventListener('focus', () => { lastFocusedField = 'origin'; });
+  destInput.addEventListener('focus', () => { lastFocusedField = 'destination'; });
+
+  // Initialize drag and drop (must run after inputs are finalized)
+  initDragAndDrop(page, 'cargo');
 
   // Setup popular route buttons
   const routeButtons = page.querySelectorAll('.flex-wrap button');
@@ -62,7 +70,7 @@ export function initRouteSelection() {
   const suggestionItems = page.querySelectorAll('.cursor-pointer');
   suggestionItems.forEach(item => {
     item.addEventListener('click', () => {
-      handleSuggestionClick(item, originInput, destInput, 'cargo');
+      handleSuggestionClick(item, originInput, destInput, 'cargo', null, () => lastFocusedField);
     });
     
     // Make suggestions draggable
@@ -89,9 +97,6 @@ export function initRouteSelection() {
     });
   }
 
-  // Setup input validation and styling
-  setupInputHandlers(originInput, destInput, 'cargo');
-
   // Load saved data
   loadSavedRouteData(originInput, destInput, 'cargo');
 
@@ -112,9 +117,6 @@ export function initTravelerRouteSelection() {
 
   console.log('Initializing enhanced traveler route selection with drag & drop...');
   
-  // Initialize drag and drop
-  initDragAndDrop(page, 'traveler');
-
   // Get DOM elements using specific IDs
   let originInput = page.querySelector('#origin-input');
   let destInput = page.querySelector('#dest-input');
@@ -128,6 +130,18 @@ export function initTravelerRouteSelection() {
   }
 
   console.log('Found traveler route inputs:', { originInput, destInput });
+
+  // Setup input validation and styling (and de-duplicate listeners)
+  ({ originInput, destInput } =
+    setupInputHandlers(originInput, destInput, 'traveler', submitBtn));
+
+  // Track which field user selected last (clicking a suggestion can blur inputs)
+  let lastFocusedField = null;
+  originInput.addEventListener('focus', () => { lastFocusedField = 'origin'; });
+  destInput.addEventListener('focus', () => { lastFocusedField = 'destination'; });
+
+  // Initialize drag and drop (must run after inputs are finalized)
+  initDragAndDrop(page, 'traveler');
 
   // Setup popular route buttons
   const popularButtons = page.querySelectorAll('.popular-route-btn');
@@ -248,7 +262,7 @@ export function initTravelerRouteSelection() {
       e.preventDefault();
       e.stopPropagation();
       console.log('Airport suggestion clicked:', item);
-      handleSuggestionClick(item, originInput, destInput, 'traveler', submitBtn);
+      handleSuggestionClick(item, originInput, destInput, 'traveler', submitBtn, () => lastFocusedField);
     });
 
     // Make draggable
@@ -308,10 +322,6 @@ export function initTravelerRouteSelection() {
     }, );
   }
 
-  // Setup input validation and styling
-  ({ originInput, destInput } =
-  setupInputHandlers(originInput, destInput, 'traveler', submitBtn));
-
   // Load saved data
   loadSavedRouteData(originInput, destInput, 'traveler');
 
@@ -333,15 +343,17 @@ export function initTravelerRouteSelection() {
 
 // Helper function to set up input handlers
 function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
-  const inputs = [originInput, destInput];
-
-  inputs.forEach(input => {
-    // Remove existing listeners to avoid duplicates
+  const cloneInput = (input) => {
+    if (!input || !input.parentNode) return input;
+    const currentValue = input.value;
     const newInput = input.cloneNode(true);
+    newInput.value = currentValue;
     input.parentNode.replaceChild(newInput, input);
-  });
+    return newInput;
+  };
 
-  // Get fresh references
+  // Remove existing listeners to avoid duplicates (without losing the current value)
+  // We clone the inputs, then attach listeners to the fresh nodes below.
   const freshOriginInput = type === 'cargo' ?
     document.querySelector('[data-page="cargo-route"] input[placeholder*="مبدأ"]') :
     document.querySelector('#origin-input');
@@ -350,20 +362,27 @@ function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
     document.querySelector('[data-page="cargo-route"] input[placeholder*="مقصد"]') :
     document.querySelector('#dest-input');
 
-  [freshOriginInput, freshDestInput].forEach(input => {
+  const resolvedOriginInput = freshOriginInput || originInput;
+  const resolvedDestInput = freshDestInput || destInput;
+
+  // Clone the resolved elements to remove any previous listeners while keeping the current value.
+  const clonedOriginInput = cloneInput(resolvedOriginInput);
+  const clonedDestInput = cloneInput(resolvedDestInput);
+
+  [clonedOriginInput, clonedDestInput].forEach(input => {
     if (!input) return;
 
     input.addEventListener('input', () => {
       updateInputStyle(input);
 
       if (submitBtn) {
-        const isValid = validateRoute(freshOriginInput.value, freshDestInput.value, false);
+        const isValid = validateRoute(clonedOriginInput.value, clonedDestInput.value, false);
         submitBtn.disabled = !isValid;
       }
 
       // Auto-save after a delay
       debounce(() => {
-        saveRouteData(freshOriginInput.value, freshDestInput.value, type);
+        saveRouteData(clonedOriginInput.value, clonedDestInput.value, type);
       }, 500);
     });
 
@@ -384,17 +403,17 @@ function setupInputHandlers(originInput, destInput, type, submitBtn = null) {
       if (e.key === 'Enter') {
         e.preventDefault();
         // Move focus to next input or submit
-        if (input === freshOriginInput) {
-          freshDestInput.focus();
-        } else if (input === freshDestInput && submitBtn && !submitBtn.disabled) {
+        if (input === clonedOriginInput) {
+          clonedDestInput.focus();
+        } else if (input === clonedDestInput && submitBtn && !submitBtn.disabled) {
           submitBtn.click();
         }
       }
     });
   });
      return {
-    originInput: freshOriginInput,
-    destInput: freshDestInput
+    originInput: clonedOriginInput,
+    destInput: clonedDestInput
   };
 }
 
@@ -1030,7 +1049,7 @@ function updatePlaceholderVisibility(inputElement) {
   }
 }
 // Helper function to handle suggestion clicks
-function handleSuggestionClick(item, originInput, destInput, type, submitBtn = null) {
+function handleSuggestionClick(item, originInput, destInput, type, submitBtn = null, getLastFocusedField = null) {
   const title = item.querySelector('.text-sm.font-bold')?.textContent.trim();
   const airport = item.dataset.airport || '';
   const code = item.dataset.code || '';
@@ -1042,29 +1061,34 @@ function handleSuggestionClick(item, originInput, destInput, type, submitBtn = n
 
   console.log('Suggestion clicked:', { title, airport, code, displayText });
 
-  // Determine which input is focused
+  // Prefer the currently focused input, but clicking a suggestion usually blurs inputs,
+  // so fall back to the last-focused field. No popup selector.
   const focusedInput = document.activeElement;
+  let targetInput = null;
 
-  if (focusedInput === originInput) {
-    originInput.value = displayText;
-    updateInputStyle(originInput);
-  } else if (focusedInput === destInput) {
-    destInput.value = displayText;
-    updateInputStyle(destInput);
+  if (focusedInput === originInput) targetInput = originInput;
+  else if (focusedInput === destInput) targetInput = destInput;
+
+  if (!targetInput && typeof getLastFocusedField === 'function') {
+    const lastFocused = getLastFocusedField();
+    if (lastFocused === 'origin') targetInput = originInput;
+    else if (lastFocused === 'destination') targetInput = destInput;
+  }
+
+  if (!targetInput) {
+    if (!originInput.value.trim()) targetInput = originInput;
+    else if (!destInput.value.trim()) targetInput = destInput;
+    else targetInput = destInput;
+  }
+
+  targetInput.value = displayText;
+  updateInputStyle(targetInput);
+
+  // Keep the flow fast: move to the next field when possible
+  if (targetInput === originInput && !destInput.value.trim()) {
+    destInput.focus();
   } else {
-    // If no input is focused, check which one is empty or fill both
-    if (!originInput.value.trim()) {
-      originInput.value = displayText;
-      originInput.focus();
-      updateInputStyle(originInput);
-    } else if (!destInput.value.trim()) {
-      destInput.value = displayText;
-      destInput.focus();
-      updateInputStyle(destInput);
-    } else {
-      // Both inputs have values - let user choose
-      showInputSelector(originInput, destInput, displayText, type);
-    }
+    targetInput.focus();
   }
 
   // Save to localStorage

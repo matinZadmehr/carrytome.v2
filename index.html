@@ -68,30 +68,32 @@
       font-family: "Noto Sans Arabic", Vazirmatn, Manrope, sans-serif;
       overflow-x: hidden;
     }
+
     /* Fix for home page scrolling */
-    html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
     }
 
     body.home-page-active {
-        overflow: hidden !important;
-        position: fixed !important;
-        width: 100% !important;
-        height: 100% !important;
+      overflow: hidden !important;
+      position: fixed !important;
+      width: 100% !important;
+      height: 100% !important;
     }
 
     #page-home {
-        height: 100vh !important;
-        max-height: 100vh !important;
-        overflow: hidden !important;
+      height: 100vh !important;
+      max-height: 100vh !important;
+      overflow: hidden !important;
     }
 
     #page-home main {
-        height: 100% !important;
-        overflow: hidden !important;
+      height: 100% !important;
+      overflow: hidden !important;
     }
 
     /* فقط صفحه اصلی نباید اسکرول بشه */
@@ -720,9 +722,8 @@
     </main>
   </section>
 
-  <section id="page-cargo-cat" data-page="cargo-cat"
-    class="page hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased selection:bg-primary/30 selection:text-primary pb-28
-    aria-hidden="true">
+  <section id="page-cargo-cat" data-page="cargo-cat" class="page hidden bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display antialiased selection:bg-primary/30 selection:text-primary pb-28
+    aria-hidden=" true">
     <div
       class="relative flex flex-col w-full max-w-md mx-auto min-h-screen bg-background-light dark:bg-background-dark group/design-root shadow-2xl border-x border-slate-200/50 dark:border-slate-800/50">
 
@@ -997,15 +998,15 @@
           </div>
         </div>
         <div class="h-10"></div>
-        <div>          
-           <button
+        <div>
+          <button
             class="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-4 px-6 text-base font-bold text-white shadow-lg shadow-blue-500/30 transition-transform active:scale-[0.98] hover:bg-blue-600 "
             data-href="#/cargo-val" type="button">
             <span>تایید و ادامه</span>
             <span class="material-symbols-outlined text-[20px] rtl:rotate-180">arrow_forward</span>
           </button>
         </div>
-      </main> 
+      </main>
     </div>
   </section>
   <section id="page-cargo-val" data-page="cargo-val"
@@ -3678,20 +3679,221 @@
         <span class="text-[10px] font-medium">پروفایل</span>
       </a>
     </div>
-    <script>
-document.addEventListener('DOMContentLoaded', function() {
-    // اضافه کردن کلاس به body هنگام نمایش صفحه اصلی
-    document.body.classList.add('home-page-active');
-    
-    // حذف کلاس هنگام تغییر صفحه
-    document.addEventListener('click', function(e) {
+  </section>
+  <section id="page-kyc" data-page="kyc" aria-hidden="true"
+    class="bg-background-light dark:bg-background-dark font-body text-slate-900 dark:text-white antialiased transition-colors duration-200">
+    <div class="relative flex h-full min-h-screen w-full flex-col overflow-x-hidden pb-24">
+      <div
+        class="sticky top-0 z-50 flex items-center justify-between bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md px-4 py-3 shadow-sm transition-all">
+        <h1 class="text-lg font-bold leading-tight tracking-tight text-center flex-1">تأیید هویت (KYV) حامل</h1>
+        <button
+          class="flex size-10 items-center justify-center rounded-full text-slate-800 dark:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors">
+          <span class="material-symbols-outlined">help</span>
+        </button>
+      </div>
+      <div class="flex flex-col items-center px-6 pt-6 pb-2 text-center">
+        <div
+          class="mb-4 flex size-16 items-center justify-center rounded-full bg-primary/10 text-primary animate-pulse">
+          <span class="material-symbols-outlined icon-filled text-4xl">verified_user</span>
+        </div>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-2 font-display">احراز هویت امن</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 max-w-xs leading-relaxed">
+          مدارک شما با بالاترین استانداردهای امنیتی رمزگذاری شده و تنها برای تأیید صلاحیت استفاده می‌شود.
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 px-6 py-6">
+        <div class="flex items-end justify-between mb-1">
+          <span class="text-sm font-bold text-slate-700 dark:text-slate-300">پیشرفت تأیید</span>
+          <span class="text-xs font-medium text-primary bg-primary/10 px-2 py-0.5 rounded-full">۰ از ۲ مدرک</span>
+        </div>
+        <div class="relative h-2.5 w-full rounded-full bg-slate-200 dark:bg-slate-700 overflow-hidden">
+          <div class="absolute top-0 right-0 h-full rounded-full bg-primary transition-all duration-500 ease-out"
+            style="width: 5%;"></div>
+        </div>
+      </div>
+      <div class="px-6 pb-2">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-xl">folder_shared</span>
+          مدارک مورد نیاز
+        </h3>
+      </div>
+      <div class="flex flex-col gap-4 px-4 pb-4">
+        <div
+          class="group relative flex items-center justify-between rounded-xl bg-surface-light dark:bg-surface-dark p-4 shadow-sm border border-slate-100 dark:border-slate-800 hover:border-primary/50 transition-all cursor-pointer ring-2 ring-transparent hover:ring-primary/10">
+          <div class="flex items-center gap-4">
+            <div class="flex flex-col">
+              <p class="text-base font-bold text-slate-900 dark:text-white">کارت ملی یا پاسپورت</p>
+              <p class="text-xs text-slate-500 dark:text-slate-400">ارائه یکی از این مدارک کافی است</p>
+            </div>
+          </div>
+          <div
+            class="flex size-10 shrink-0 items-center justify-center rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-400 group-hover:border-primary group-hover:text-primary group-hover:bg-primary/5 transition-all">
+            <span class="material-symbols-outlined">add_a_photo</span>
+          </div>
+        </div>
+        <div
+          class="group relative flex items-center justify-between rounded-xl bg-surface-light dark:bg-surface-dark p-4 shadow-sm border border-orange-200 dark:border-orange-900/50 hover:border-orange-400 transition-all cursor-pointer">
+          <div class="flex items-center gap-4">
+            <div class="flex flex-col">
+              <p class="text-base font-bold text-slate-900 dark:text-white">عکس سلفی</p>
+              <p class="text-xs text-orange-500 font-medium flex items-center gap-1">
+                <span class="material-symbols-outlined text-[14px] icon-filled">error</span>
+                نیاز به اصلاح: نور کم
+              </p>
+            </div>
+          </div>
+          <div
+            class="flex size-10 shrink-0 items-center justify-center rounded-full bg-orange-50 dark:bg-orange-900/20 text-orange-600 hover:bg-orange-100 dark:hover:bg-orange-900/40 transition-all">
+            <span class="material-symbols-outlined">refresh</span>
+          </div>
+        </div>
+      </div>
+      <div class="px-6 py-2 text-center">
+        <p class="text-xs text-slate-400 dark:text-slate-500 flex items-center justify-center gap-1">
+          <span class="material-symbols-outlined text-[16px]">lock</span>
+          اطلاعات شما با پروتکل SSL 256-bit محافظت می‌شود
+        </p>
+      </div>
+    </div>
+    <div
+      class="fixed bottom-0 left-0 right-0 z-40 bg-background-light dark:bg-background-dark border-t border-slate-200 dark:border-slate-800 px-4 py-4 pb-8 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+      <button
+        class="w-full flex items-center justify-center gap-2 rounded-xl bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 py-3.5 text-base font-bold cursor-not-allowed transition-all"
+        disabled="">
+        <span>ارسال برای بررسی</span>
+        <span class="material-symbols-outlined text-lg opacity-70">send</span>
+      </button>
+      <div class="mt-3 text-center">
+        <a class="text-xs font-medium text-primary hover:text-blue-600 transition-colors" href="#">قوانین حریم خصوصی و
+          شرایط استفاده</a>
+      </div>
+    </div>
+    <div class="hidden relative mx-4 mt-4 rounded-2xl bg-primary/5 border border-primary/20 p-4">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-primary mt-0.5">info</span>
+        <div class="flex flex-col gap-1">
+          <p class="text-sm font-bold text-primary">راهنمای کارت ملی یا پاسپورت</p>
+          <ul class="list-disc list-inside text-xs text-slate-600 dark:text-slate-300 space-y-1">
+            <li>اطلاعات باید کاملاً خوانا و واضح باشند.</li>
+            <li>از انعکاس نور فلش خودداری کنید.</li>
+            <li>تمام چهار گوشه مدرک باید در کادر باشد.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </section>
+  <section id="page-traveler-info" date-page="traveler-info" aria-hidden="true" 
+      class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-50 font-body antialiased transition-colors duration-200">
+  <div
+    class="relative flex flex-col min-h-screen w-full max-w-md mx-auto bg-background-light dark:bg-background-dark overflow-x-hidden shadow-2xl group/design-root">
+    <div
+      class="sticky top-0 z-40 flex items-center justify-between p-4 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-md border-b border-transparent dark:border-slate-800/50 transition-all">
+      <button aria-label="بستن"
+        class="flex items-center justify-center w-10 h-10 rounded-full hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-900 dark:text-white transition-colors">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+      <h1 class="text-base font-bold text-slate-900 dark:text-white">حامل شوید</h1>
+      <div class="w-10"></div>
+    </div>
+    <main class="flex-1 pb-32">
+      <div class="px-4 py-2">
+        <div class="relative w-full aspect-[4/3] rounded-2xl overflow-hidden shadow-lg bg-slate-200 dark:bg-slate-800"
+          data-alt="Traveler relaxing in an airport lounge viewing airplanes"
+          style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCi7W4Ku4q_0Fc0_z2JyIQjuZOTmYpBCZ5ok0jvfskketJMZ5dcIOYUJoYjcsUncw94MPMmKjKxX4SDFg_Ig_PBYArPNcjnF1ZBUc03czng9IC2i8Ox6KT0t3SIK-kcS_oH0RJcfZBaVHPHAjbXFGBhTdDL1D9CX9KJgpYg4_Qnzzof5F4on2aqDIKLhjIgcYd1B3J9fWw6JpynXL_02zJbWsMkGBNNVrPI2PZ04XVmLajfXfHF3F0iv3BtBufI3POBE4a33IsPKT01'); background-size: cover; background-position: center;">
+          <div
+            class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent flex flex-col justify-end p-6">
+            <div class="flex mb-2">
+              <span
+                class="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md border border-white/30 text-xs font-bold text-white shadow-sm">
+                عضویت ویژه
+              </span>
+            </div>
+            <h2 class="text-white text-2xl font-bold leading-tight font-display">سفرهای خود را سودآور کنید</h2>
+          </div>
+        </div>
+      </div>
+      <div class="px-5 py-4 text-center">
+        <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2 leading-snug">
+          به شبکه حاملان مورد اعتماد Carry to Me بپیوندید
+        </h3>
+        <p class="text-slate-600 dark:text-slate-400 text-sm leading-relaxed font-normal">
+          هزینه سفر خود را پوشش دهید و به جابجایی امن اقلام با ارزش کمک کنید.
+        </p>
+      </div>
+      <div class="px-5 py-4 relative">
+        <div class="text-center mb-8">
+          <span class="text-primary font-bold text-xs uppercase tracking-wider mb-1 block opacity-80">روند کار</span>
+          <h4 class="text-xl font-bold text-slate-900 dark:text-white">چگونه کار می‌کند؟</h4>
+        </div>
+        <div class="relative pl-2 pr-2">
+          <div class="absolute right-[27px] top-4 bottom-12 w-[2px] bg-slate-200 dark:bg-slate-700 rounded-full"></div>
+          <div class="relative flex gap-5 mb-8 group">
+            <div
+              class="relative z-10 flex items-center justify-center w-14 h-14 rounded-full bg-primary text-white shadow-lg shadow-primary/30 shrink-0 border-4 border-background-light dark:border-background-dark">
+              <span class="font-bold font-display text-lg">۱</span>
+            </div>
+            <div class="pt-2">
+              <h5 class="text-base font-bold text-slate-900 dark:text-white mb-1">احراز هویت</h5>
+              <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                مدارک هویتی خود را بارگذاری کنید تا پروفایل شما تایید شود.
+              </p>
+            </div>
+          </div>
+          <div class="relative flex gap-5 mb-8 group">
+            <div
+              class="relative z-10 flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-slate-800 border-2 border-primary text-primary shrink-0 shadow-sm shadow-slate-200 dark:shadow-none">
+              <span class="font-bold font-display text-lg">۲</span>
+            </div>
+            <div class="pt-2">
+              <h5 class="text-base font-bold text-slate-900 dark:text-white mb-1">دریافت بسته</h5>
+              <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                بسته را در فرودگاه از نماینده ما تحویل بگیرید.
+              </p>
+            </div>
+          </div>
+          <div class="relative flex gap-5 group">
+            <div
+              class="relative z-10 flex items-center justify-center w-14 h-14 rounded-full bg-white dark:bg-slate-800 border-2 border-slate-300 dark:border-slate-600 text-slate-400 dark:text-slate-500 shrink-0">
+              <span class="font-bold font-display text-lg">۳</span>
+            </div>
+            <div class="pt-2">
+              <h5 class="text-base font-bold text-slate-900 dark:text-white mb-1">تحویل و دریافت پاداش</h5>
+              <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                بسته را در مقصد تحویل داده و پاداش خود را آنی دریافت کنید.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div
+      class="fixed bottom-0 left-0 right-0 p-4 pb-8 bg-background-light/90 dark:bg-background-dark/90 backdrop-blur-xl border-t border-slate-200 dark:border-slate-800 max-w-md mx-auto z-50">
+      <button
+        class="w-full bg-primary hover:bg-primary/90 text-white font-bold h-14 rounded-full shadow-lg shadow-primary/25 transition-all active:scale-[0.98] flex items-center justify-center gap-2 group">
+        <span class="text-lg">شروع ثبت نام</span>
+        <span
+          class="material-symbols-outlined text-xl group-hover:-translate-x-1 transition-transform rtl:rotate-180">arrow_right_alt</span>
+      </button>
+      <p class="text-center text-[10px] text-slate-400 dark:text-slate-500 mt-3 font-medium">
+        ثبت نام رایگان است و کمتر از ۲ دقیقه زمان می‌برد
+      </p>
+    </div>
+  </div>
+  </section>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // اضافه کردن کلاس به body هنگام نمایش صفحه اصلی
+      document.body.classList.add('home-page-active');
+
+      // حذف کلاس هنگام تغییر صفحه
+      document.addEventListener('click', function (e) {
         if (e.target.closest('[data-route]') && !e.target.closest('#page-home')) {
-            document.body.classList.remove('home-page-active');
+          document.body.classList.remove('home-page-active');
         }
+      });
     });
-});
-</script>
+  </script>
 </body>
-</section>
 
 </html>
