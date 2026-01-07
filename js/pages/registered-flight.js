@@ -161,14 +161,6 @@ function initFlightActions() {
   flightActionsInitialized = true;
 
   document.addEventListener('click', (e) => {
-    const addButton = e.target.closest('button.add-to-trip-btn');
-    if (addButton) {
-      console.log('[ADD CLICK]', addButton.dataset);
-      e.preventDefault();
-      toggleFlightSubmission(addButton.dataset.flightId, addButton);
-      return;
-    }
-
     const viewButton = e.target.closest('button[data-route="flight-order"]');
     if (viewButton) {
       console.log('[VIEW CLICK]', viewButton.dataset);
@@ -183,7 +175,7 @@ function initFlightActions() {
 function toggleFlightSubmission(flightId, button) {
   console.log('🛫 toggleFlightSubmission called', flightId, button);
   const flight = FLIGHT_DATA.find(f => f.id == flightId);
-  if (!flight) return;
+  if (!flight) return false;
 
   if (!flight.submitted) {
     flight.submitted = true;
@@ -219,7 +211,11 @@ function toggleFlightSubmission(flightId, button) {
     // Update view button orderId
     const viewBtn = button.closest('div').querySelector('button[data-route="flight-order"]');
     if (viewBtn) viewBtn.dataset.orderId = uuid;
+
+    return true;
   }
+
+  return false;
 }
 
 /* =======================

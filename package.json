@@ -1,0 +1,14 @@
+{
+  "name": "carrytome-miniapp",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "server": "node server/index.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^4.19.2",
+    "multer": "^1.4.5-lts.1"
+  }
+}

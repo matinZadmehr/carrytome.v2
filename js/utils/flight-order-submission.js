@@ -1,79 +1,68 @@
 // flight-order-submission.js
-//import { addOrder } from '../components/cart.js';
-import { showNotification } from './notifications.js';
-import { addDynamicOrder } from './order-store.js';
+// Handles the "قبول درخواست" click on registered-flight cards.
+// IMPORTANT: This should NOT create/save orders; it only routes based on KYC.
+
+import { isTravelerKycRegistered } from './kyc-status.js';
+
+function extractFlightSummary(btn) {
+  const card = btn.closest('.group');
+  if (!card) return null;
+
+  const routeText = card.querySelector('h3')?.textContent || '';
+  const codes = routeText.match(/[A-Z]{3}/g) || [];
+  const originCode = codes[0] || null;
+  const destinationCode = codes[1] || null;
+
+  const routeLine = card.querySelector('p')?.textContent || '';
+  const cityParts = routeLine.split(' به ').map((p) => p.trim()).filter(Boolean);
+  const originCity = cityParts.length >= 2 ? cityParts[0] : null;
+  const destinationCity = cityParts.length >= 2 ? cityParts[cityParts.length - 1] : null;
+
+  const badges = Array.from(card.querySelectorAll('span.inline-flex'));
+  const dateBadge = badges.find((b) => b.querySelector('.material-symbols-outlined')?.textContent?.includes('calendar_today'));
+
+  const dateText = dateBadge ? dateBadge.textContent.replace('calendar_today', '').trim() : null;
+
+  const rewardText = card.querySelector('.text-primary')?.textContent || '';
+  const rewardAmount = (rewardText.match(/[\d.,]+/) || [])[0] || null;
+  const rewardCurrency = rewardText.includes('OMR') ? 'OMR' : ((rewardText.match(/[A-Z]{3}/) || [])[0] || null);
+
+  return {
+    originCode,
+    originCity,
+    destinationCode,
+    destinationCity,
+    flightType: null,
+    date: dateText,
+    time: null,
+    baggage: null,
+    rewardAmount,
+    rewardCurrency,
+    routeLine: routeLine || null,
+  };
+}
 
 export function initFlightOrderSubmission() {
-  // Attach a single click listener to the document
   document.addEventListener('click', (e) => {
     const btn = e.target.closest('.add-to-trip-btn');
-    if (!btn) return; // Ignore clicks outside the buttons
+    if (!btn) return;
 
     e.preventDefault();
+    e.stopImmediatePropagation();
 
     const flightId = btn.dataset.flightId;
-    if (!flightId) {
-      console.warn('⚠️ Flight button clicked but no flightId found');
-      return;
-    }
+    if (!flightId) return;
 
-    console.log('🖱️ Flight add button clicked', flightId);
-
-    // Get the parent element of the button (assumes siblings have h3, p, reward span)
-    const flightEl = btn.closest('.group'); // instead of btn.parentElement
-
-    const flight = {
-      id: flightId,
-      from: flightEl.querySelector('h3')?.textContent.split('✈️')[0].trim() || 'Unknown',
-      to: flightEl.querySelector('h3')?.textContent.split('✈️')[1]?.trim() || 'Unknown',
-      route: flightEl.querySelector('p')?.textContent || '',
-      reward: flightEl.querySelector('.text-primary')?.textContent || '',
-      rewardValue: parseInt(flightEl.querySelector('.text-primary')?.textContent) || 0,
-      submitted: false
-    };
-
-    // Disable button and update UI
-    btn.disabled = true;
-    btn.classList.remove('bg-primary', 'hover:bg-blue-600');
-    btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'text-white');
-    btn.innerHTML = '<span class="material-symbols-outlined text-[14px]">check</span> ثبت شد';
-
-    // Generate UUID for the order
-    const uuid = crypto.randomUUID();
-    flight.orderId = uuid;
-
-    // Create order object
-    const orderObj = {
-      id: `flight-${uuid}`,
-      type: 'flight',
-      dateISO: new Date().toISOString(),
-      statusText: 'در دسترس',
-      statusColor: 'emerald',
-      from: flight.from,
-      to: flight.to,
-      action: 'افزودن به سفارش‌ها',
-      description: flight.route,
-      price: flight.rewardValue,
-      details: { reward: flight.reward, description: flight.route }
-    };
-
-    // Add to cart
     try {
-      if (typeof addOrder !== 'undefined') addOrder(orderObj);
-      if (typeof addDynamicOrder !== 'undefined') addDynamicOrder(orderObj);
-
-      if (typeof showNotification !== 'undefined') {
-        showNotification(`سفر ${flight.from} → ${flight.to} به سفرهای من اضافه شد`, 'success');
-      }
-
-      console.log('✅ Flight order added', orderObj);
-    } catch (err) {
-      console.error('❌ Failed to add flight order', err);
-      // Revert button state on error
-      btn.disabled = false;
-      btn.classList.remove('bg-emerald-500', 'hover:bg-emerald-600', 'text-white');
-      btn.classList.add('bg-primary', 'hover:bg-blue-600');
-      btn.innerHTML = 'افزودن به سفارش‌ها';
+      sessionStorage.setItem('selectedFlightId', String(flightId));
+      const summary = extractFlightSummary(btn);
+      if (summary) sessionStorage.setItem('selectedFlightSummary', JSON.stringify(summary));
+    } catch {
+      // ignore storage errors
     }
+
+    const targetRoute = isTravelerKycRegistered() ? 'order-review' : 'traveler-greet';
+    if (window.router) window.router.navigate(targetRoute);
+    else window.location.hash = `#/${targetRoute}`;
   });
 }

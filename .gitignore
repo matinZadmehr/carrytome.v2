@@ -1,2 +1,5 @@
 *.md
 a.html
+node_modules/
+.env
+.env.*

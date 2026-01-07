@@ -20,6 +20,10 @@ async function loadPageInitializers() {
   console.log('📦 Loading page initializers...');
   
   const pages = [
+    { key: 'traveler-greet', path: './pages/kyc-flow.js', init: 'initTravelerGreet' },
+    { key: 'kyc', path: './pages/kyc-flow.js', init: 'initKycPage' },
+    { key: 'flight-kyc', path: './pages/kyc-flow.js', init: 'initFlightKyc' },
+    { key: 'order-review', path: './pages/order-review-flow.js', init: 'initOrderReviewPage' },
     { key: 'traveler-route', path: './components/route-selection.js', init: 'initTravelerRouteSelection'},
     { key: 'traveler-flight-date', path: './pages/traveler-flight-date.js', init: 'initTravelerFlightDate' },
     { key: 'my-order', path: './pages/my-order.js', init: 'initMyOrderPage' },
